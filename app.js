@@ -32,7 +32,8 @@ const THEME_MANIFEST = [
 // Overlay manifest - Add/remove overlays by modifying this array
 const OVERLAY_MANIFEST = [
     { id: 'colorful', label: 'Colorful Swirl' },
-    { id: 'monochrome', label: 'Monochrome Swirl' }
+    { id: 'monochrome', label: 'Monochrome Swirl' },
+    { id: 'nyancat', label: 'Nyan Cat' }
 ];
 
 // Global state
@@ -444,10 +445,21 @@ function showTimerOverlay(overlayType = 'colorful') {
     // Add show class for opacity transition
     overlay.classList.add('show');
     
-    // Start the 4D swirl animation
-    const swirl = overlay.querySelector('.swirl-4d');
-    if (swirl) {
-        swirl.style.animation = 'swirl4D 2s ease-in-out infinite';
+    // Start animations based on overlay type
+    if (overlayType === 'nyancat') {
+        // For Nyan Cat, restart the animation
+        const nyancat = overlay.querySelector('.nyancat');
+        if (nyancat) {
+            nyancat.style.animation = 'none';
+            nyancat.offsetHeight; // Force reflow
+            nyancat.style.animation = 'nyancatRun 8s linear infinite';
+        }
+    } else {
+        // For swirl overlays, start the 4D swirl animation
+        const swirl = overlay.querySelector('.swirl-4d');
+        if (swirl) {
+            swirl.style.animation = 'swirl4D 2s ease-in-out infinite';
+        }
     }
     
     // Hide overlay after sound duration or 15 seconds default
@@ -460,15 +472,19 @@ function hideTimerOverlay(overlayType = 'colorful') {
     const overlayId = `timer-overlay-${overlayType}`;
     const overlay = document.getElementById(overlayId);
     const swirl = overlay ? overlay.querySelector('.swirl-4d') : null;
+    const nyancat = overlay ? overlay.querySelector('.nyancat') : null;
     
     if (!overlay) return;
     
     // Remove show class for opacity transition
     overlay.classList.remove('show');
     
-    // Stop animation
+    // Stop animations
     if (swirl) {
         swirl.style.animation = 'none';
+    }
+    if (nyancat) {
+        nyancat.style.animation = 'none';
     }
     
     // Hide overlay after transition

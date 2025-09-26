@@ -1157,3 +1157,392 @@ body.theme-twilight-zone h1 {
         height: 60px;
     }
 }
+
+/* Nyan Cat Overlay Styles */
+.nyancat-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.nyancat {
+    position: absolute;
+    top: 50%;
+    left: -200px;
+    width: 200px;
+    height: 100px;
+    transform: translateY(-50%);
+    animation: nyancatRun 8s linear infinite;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* Cat head - gray rounded square */
+.cat-head {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 28px;
+    height: 28px;
+    background: #c0c0c0;
+    border: 2px solid #000000;
+    border-radius: 4px;
+}
+
+/* Cat ears */
+.cat-ear {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #c0c0c0;
+    border: 2px solid #000000;
+    border-radius: 2px;
+}
+
+.cat-ear.left {
+    top: -6px;
+    left: 2px;
+    transform: rotate(-45deg);
+}
+
+.cat-ear.right {
+    top: -6px;
+    right: 2px;
+    transform: rotate(45deg);
+}
+
+/* Cat eyes */
+.cat-eye {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #000000;
+    border-radius: 50%;
+    top: 8px;
+}
+
+.cat-eye.left {
+    left: 6px;
+}
+
+.cat-eye.right {
+    right: 6px;
+}
+
+/* Pop-Tart body */
+.poptart-body {
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    width: 48px;
+    height: 32px;
+    background: #ff69b4;
+    border: 2px solid #000000;
+    border-radius: 4px;
+}
+
+/* Sprinkles */
+.sprinkle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border: 1px solid #000000;
+}
+
+.sprinkle.red {
+    background: #ff0000;
+    top: 4px;
+    left: 8px;
+}
+
+.sprinkle.yellow {
+    background: #ffff00;
+    top: 8px;
+    left: 16px;
+}
+
+.sprinkle.green {
+    background: #00ff00;
+    top: 12px;
+    left: 24px;
+}
+
+.sprinkle.blue {
+    background: #0000ff;
+    top: 6px;
+    left: 32px;
+}
+
+.sprinkle.magenta {
+    background: #ff00ff;
+    top: 16px;
+    left: 12px;
+}
+
+.sprinkle.cyan {
+    background: #00ffff;
+    top: 20px;
+    left: 28px;
+}
+
+/* Rainbow trail */
+.rainbow-trail {
+    position: absolute;
+    top: 36px;
+    left: 72px;
+    width: 120px;
+    height: 24px;
+}
+
+.rainbow-band {
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    border: 1px solid #000000;
+}
+
+.rainbow-band.red {
+    background: #ff0000;
+    top: 0;
+}
+
+.rainbow-band.orange {
+    background: #ff8000;
+    top: 4px;
+}
+
+.rainbow-band.yellow {
+    background: #ffff00;
+    top: 8px;
+}
+
+.rainbow-band.green {
+    background: #00ff00;
+    top: 12px;
+}
+
+.rainbow-band.cyan {
+    background: #00ffff;
+    top: 16px;
+}
+
+.rainbow-band.purple {
+    background: #8000ff;
+    top: 20px;
+}
+
+/* Stars background */
+.nyancat-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, #ffffff, transparent),
+        radial-gradient(2px 2px at 40px 70px, #ffffff, transparent),
+        radial-gradient(1px 1px at 90px 40px, #ffffff, transparent),
+        radial-gradient(1px 1px at 130px 80px, #ffffff, transparent),
+        radial-gradient(2px 2px at 160px 30px, #ffffff, transparent),
+        radial-gradient(1px 1px at 200px 60px, #ffffff, transparent),
+        radial-gradient(2px 2px at 240px 20px, #ffffff, transparent),
+        radial-gradient(1px 1px at 280px 70px, #ffffff, transparent),
+        radial-gradient(2px 2px at 320px 40px, #ffffff, transparent),
+        radial-gradient(1px 1px at 360px 80px, #ffffff, transparent),
+        radial-gradient(2px 2px at 400px 30px, #ffffff, transparent),
+        radial-gradient(1px 1px at 440px 60px, #ffffff, transparent),
+        radial-gradient(2px 2px at 480px 20px, #ffffff, transparent),
+        radial-gradient(1px 1px at 520px 70px, #ffffff, transparent),
+        radial-gradient(2px 2px at 560px 40px, #ffffff, transparent),
+        radial-gradient(1px 1px at 600px 80px, #ffffff, transparent),
+        radial-gradient(2px 2px at 640px 30px, #ffffff, transparent),
+        radial-gradient(1px 1px at 680px 60px, #ffffff, transparent),
+        radial-gradient(2px 2px at 720px 20px, #ffffff, transparent),
+        radial-gradient(1px 1px at 760px 70px, #ffffff, transparent),
+        radial-gradient(2px 2px at 800px 40px, #ffffff, transparent),
+        radial-gradient(1px 1px at 840px 80px, #ffffff, transparent),
+        radial-gradient(2px 2px at 880px 30px, #ffffff, transparent),
+        radial-gradient(1px 1px at 920px 60px, #ffffff, transparent),
+        radial-gradient(2px 2px at 960px 20px, #ffffff, transparent),
+        radial-gradient(1px 1px at 1000px 70px, #ffffff, transparent);
+    background-repeat: repeat-x;
+    background-size: 100px 100px;
+    animation: starsTwinkle 3s ease-in-out infinite;
+    opacity: 0.8;
+}
+
+@keyframes nyancatRun {
+    0% {
+        left: -200px;
+        transform: translateY(-50%);
+    }
+    10% {
+        left: calc(10% - 200px);
+        transform: translateY(-70%);
+    }
+    20% {
+        left: calc(20% - 200px);
+        transform: translateY(-30%);
+    }
+    30% {
+        left: calc(30% - 200px);
+        transform: translateY(-65%);
+    }
+    40% {
+        left: calc(40% - 200px);
+        transform: translateY(-35%);
+    }
+    50% {
+        left: calc(50% - 200px);
+        transform: translateY(-50%);
+    }
+    60% {
+        left: calc(60% - 200px);
+        transform: translateY(-70%);
+    }
+    70% {
+        left: calc(70% - 200px);
+        transform: translateY(-30%);
+    }
+    80% {
+        left: calc(80% - 200px);
+        transform: translateY(-65%);
+    }
+    90% {
+        left: calc(90% - 200px);
+        transform: translateY(-35%);
+    }
+    100% {
+        left: calc(100% + 200px);
+        transform: translateY(-50%);
+    }
+}
+
+@keyframes starsTwinkle {
+    0%, 100% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Responsive Nyan Cat */
+@media (max-width: 768px) {
+    .nyancat {
+        width: 150px;
+        height: 75px;
+    }
+    
+    .cat-head {
+        top: 7px;
+        left: 0;
+        width: 21px;
+        height: 21px;
+    }
+    
+    .cat-ear {
+        width: 6px;
+        height: 6px;
+    }
+    
+    .cat-ear.left {
+        top: -4px;
+        left: 1px;
+    }
+    
+    .cat-ear.right {
+        top: -4px;
+        right: 1px;
+    }
+    
+    .cat-eye {
+        width: 3px;
+        height: 3px;
+        top: 6px;
+    }
+    
+    .cat-eye.left {
+        left: 4px;
+    }
+    
+    .cat-eye.right {
+        right: 4px;
+    }
+    
+    .poptart-body {
+        top: 15px;
+        left: 18px;
+        width: 36px;
+        height: 24px;
+    }
+    
+    .sprinkle {
+        width: 3px;
+        height: 3px;
+    }
+    
+    .sprinkle.red {
+        top: 3px;
+        left: 6px;
+    }
+    
+    .sprinkle.yellow {
+        top: 6px;
+        left: 12px;
+    }
+    
+    .sprinkle.green {
+        top: 9px;
+        left: 18px;
+    }
+    
+    .sprinkle.blue {
+        top: 4px;
+        left: 24px;
+    }
+    
+    .sprinkle.magenta {
+        top: 12px;
+        left: 9px;
+    }
+    
+    .sprinkle.cyan {
+        top: 15px;
+        left: 21px;
+    }
+    
+    .rainbow-trail {
+        top: 27px;
+        left: 54px;
+        width: 90px;
+        height: 18px;
+    }
+    
+    .rainbow-band {
+        height: 3px;
+    }
+    
+    .rainbow-band.orange {
+        top: 3px;
+    }
+    
+    .rainbow-band.yellow {
+        top: 6px;
+    }
+    
+    .rainbow-band.green {
+        top: 9px;
+    }
+    
+    .rainbow-band.cyan {
+        top: 12px;
+    }
+    
+    .rainbow-band.purple {
+        top: 15px;
+    }
+}
