@@ -24,19 +24,20 @@
                 </div>
             </div>
 
+            <div class="status-toggle">
+                <button id="toggle-status-btn" class="toggle-status-btn">Status & Log</button>
+                <button id="start-btn" class="start-btn">Start Monitoring</button>
+                <button id="stop-btn" class="stop-btn" disabled>Stop Monitoring</button>
+                <button id="test-overlay-btn" class="test-overlay-btn">Test Overlay</button>
+                <button id="test-timer-btn" class="test-timer-btn">Test Timer</button>
+                <button id="test-monitoring-btn" class="test-monitoring-btn">Test Monitoring</button>
+            </div>
+            
             <div class="status-panel" id="status-panel" style="display: none;">
                 <h3>Status & Log</h3>
                 <div id="status-log" class="status-log">
                     <p>Ready to start timers...</p>
                 </div>
-                <div class="controls">
-                    <button id="start-btn" class="start-btn">Start Monitoring</button>
-                    <button id="stop-btn" class="stop-btn" disabled>Stop Monitoring</button>
-                </div>
-            </div>
-            
-            <div class="status-toggle">
-                <button id="toggle-status-btn" class="toggle-status-btn">Status & Log</button>
             </div>
         </main>
     </div>
@@ -97,6 +98,20 @@
                 <button id="set-time-btn" class="set-time-btn">Set Time</button>
                 <button id="cancel-time-btn" class="cancel-time-btn">Cancel</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Timer Overlay - Colorful -->
+    <div id="timer-overlay-colorful" class="timer-overlay">
+        <div class="swirl-container">
+            <div class="swirl-4d colorful"></div>
+        </div>
+    </div>
+
+    <!-- Timer Overlay - Monochrome -->
+    <div id="timer-overlay-monochrome" class="timer-overlay">
+        <div class="swirl-container">
+            <div class="swirl-4d monochrome"></div>
         </div>
     </div>
 

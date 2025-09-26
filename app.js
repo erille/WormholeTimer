@@ -29,6 +29,12 @@ const THEME_MANIFEST = [
     { id: 'pastel-minimal', label: 'Pastel Minimal' }
 ];
 
+// Overlay manifest - Add/remove overlays by modifying this array
+const OVERLAY_MANIFEST = [
+    { id: 'colorful', label: 'Colorful Swirl' },
+    { id: 'monochrome', label: 'Monochrome Swirl' }
+];
+
 // Global state
 let timers = [];
 let isMonitoring = false;
@@ -69,9 +75,10 @@ function addTimer() {
     const timerId = Date.now() + Math.random();
     const timer = {
         id: timerId,
-        startTime: '',
+        startTime: '00:00:00', // Default time instead of empty
         sound: SOUND_MANIFEST[0].id,
-        theme: THEME_MANIFEST[1].id // Start with first psychedelic theme
+        theme: THEME_MANIFEST[1].id, // Start with first psychedelic theme
+        overlay: OVERLAY_MANIFEST[0].id // Start with colorful overlay
     };
     
     timers.push(timer);
@@ -130,6 +137,14 @@ function createTimerRow(timer, index) {
             </select>
         </div>
         <div>
+            <label>Overlay</label>
+            <select data-timer-id="${timer.id}" data-type="overlay">
+                ${OVERLAY_MANIFEST.map(overlay => 
+                    `<option value="${overlay.id}" ${overlay.id === timer.overlay ? 'selected' : ''}>${overlay.label}</option>`
+                ).join('')}
+            </select>
+        </div>
+        <div>
             <label>Actions</label>
             <div class="timer-actions">
                 <button class="test-btn" data-timer-id="${timer.id}" title="Test Sound"></button>
@@ -152,12 +167,21 @@ function setupEventListeners() {
     // Toggle status panel
     document.getElementById('toggle-status-btn').addEventListener('click', toggleStatusPanel);
     
+    // Test overlay button
+    document.getElementById('test-overlay-btn').addEventListener('click', showTimerOverlay);
+    
+    // Test timer button
+    document.getElementById('test-timer-btn').addEventListener('click', testTimerTrigger);
+    
+    // Test monitoring button
+    document.getElementById('test-monitoring-btn').addEventListener('click', testMonitoring);
+    
     // Timer row event delegation
     document.getElementById('timers-container').addEventListener('change', function(e) {
         const timerId = parseFloat(e.target.dataset.timerId);
         const type = e.target.dataset.type;
         
-        if (type === 'sound' || type === 'theme') {
+        if (type === 'sound' || type === 'theme' || type === 'overlay') {
             updateTimer(timerId, type, e.target.value);
         }
     });
@@ -184,6 +208,12 @@ function updateTimer(timerId, property, value) {
     if (timer) {
         timer[property] = value;
         logStatus(`Timer ${timers.indexOf(timer) + 1} updated: ${property} = ${value}`);
+        
+        // Debug log for overlay changes
+        if (property === 'overlay') {
+            console.log(`Overlay updated for timer ${timers.indexOf(timer) + 1}:`, value);
+            console.log('Current timer state:', timer);
+        }
     }
 }
 
@@ -194,11 +224,30 @@ function toggleStatusPanel() {
     const statusPanel = document.getElementById('status-panel');
     const toggleBtn = document.getElementById('toggle-status-btn');
     
-    if (statusPanel.style.display === 'none') {
+    if (statusPanel.style.display === 'none' || statusPanel.style.display === '') {
+        // Show panel with smooth transition
         statusPanel.style.display = 'block';
+        statusPanel.style.maxHeight = '0px';
+        statusPanel.style.opacity = '0';
+        
+        // Force reflow
+        statusPanel.offsetHeight;
+        
+        // Animate to full height
+        statusPanel.style.maxHeight = '500px';
+        statusPanel.style.opacity = '1';
+        
         toggleBtn.textContent = 'Hide Status & Log';
     } else {
-        statusPanel.style.display = 'none';
+        // Hide panel with smooth transition
+        statusPanel.style.maxHeight = '0px';
+        statusPanel.style.opacity = '0';
+        
+        // Hide after transition
+        setTimeout(() => {
+            statusPanel.style.display = 'none';
+        }, 300);
+        
         toggleBtn.textContent = 'Status & Log';
     }
 }
@@ -282,6 +331,14 @@ function setupWheelEvents() {
             e.preventDefault();
             const delta = e.deltaY > 0 ? 1 : -1;
             scrollWheel(wheelId, delta);
+        });
+        
+        // Click events on wheel items
+        wheel.addEventListener('click', function(e) {
+            if (e.target.classList.contains('wheel-item')) {
+                const value = parseInt(e.target.dataset.value);
+                setWheelValue(wheelId, value);
+            }
         });
         
         // Touch events for mobile
@@ -370,6 +427,90 @@ function closeTimePicker() {
     currentEditingTimerId = null;
 }
 
+function showTimerOverlay(overlayType = 'colorful') {
+    const overlayId = `timer-overlay-${overlayType}`;
+    const overlay = document.getElementById(overlayId);
+    if (!overlay) {
+        console.error(`Timer overlay not found: ${overlayId}`);
+        return;
+    }
+    
+    // Show overlay
+    overlay.style.display = 'flex';
+    
+    // Force reflow to ensure display change is applied
+    overlay.offsetHeight;
+    
+    // Add show class for opacity transition
+    overlay.classList.add('show');
+    
+    // Start the 4D swirl animation
+    const swirl = overlay.querySelector('.swirl-4d');
+    if (swirl) {
+        swirl.style.animation = 'swirl4D 2s ease-in-out infinite';
+    }
+    
+    // Hide overlay after sound duration or 15 seconds default
+    setTimeout(() => {
+        hideTimerOverlay(overlayType);
+    }, 15000); // 15 seconds default
+}
+
+function hideTimerOverlay(overlayType = 'colorful') {
+    const overlayId = `timer-overlay-${overlayType}`;
+    const overlay = document.getElementById(overlayId);
+    const swirl = overlay ? overlay.querySelector('.swirl-4d') : null;
+    
+    if (!overlay) return;
+    
+    // Remove show class for opacity transition
+    overlay.classList.remove('show');
+    
+    // Stop animation
+    if (swirl) {
+        swirl.style.animation = 'none';
+    }
+    
+    // Hide overlay after transition
+    setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 300); // Match CSS transition duration
+}
+
+function testTimerTrigger() {
+    // Test with the first timer if it exists
+    if (timers.length > 0) {
+        const timer = timers[0];
+        console.log('Testing timer trigger with:', timer);
+        triggerTimer(timer, 0);
+        logStatus('🧪 Manual timer test triggered', 'test');
+    } else {
+        logStatus('⚠️ No timers available for testing', 'error');
+    }
+}
+
+function testMonitoring() {
+    if (timers.length === 0) {
+        logStatus('⚠️ No timers available for testing', 'error');
+        return;
+    }
+    
+    // Set first timer to current time + 5 seconds
+    const now = new Date();
+    now.setSeconds(now.getSeconds() + 5);
+    const testTime = formatTime(now);
+    
+    timers[0].startTime = testTime;
+    renderTimers();
+    
+    logStatus(`🧪 Timer 1 set to trigger in 5 seconds: ${testTime}`, 'test');
+    
+    // Start monitoring if not already started
+    if (!isMonitoring) {
+        startMonitoring();
+    }
+}
+
 function setTimeFromPicker() {
     if (!currentEditingTimerId) return;
     
@@ -402,10 +543,15 @@ function testSound(timerId) {
         // Apply theme for testing
         applyTheme(timer.theme);
         
+        // Show 4D swirl overlay for testing with selected type
+        const overlayType = timer.overlay || 'colorful';
+        showTimerOverlay(overlayType);
+        
         const soundLabel = SOUND_MANIFEST.find(s => s.id === timer.sound)?.label || timer.sound;
         const themeLabel = THEME_MANIFEST.find(t => t.id === timer.theme)?.label || timer.theme;
+        const overlayLabel = OVERLAY_MANIFEST.find(o => o.id === overlayType)?.label || overlayType;
         
-        logStatus(`🧪 Testing: Sound: ${soundLabel}, Theme: ${themeLabel}`, 'test');
+        logStatus(`🧪 Testing: Sound: ${soundLabel}, Theme: ${themeLabel}, Overlay: ${overlayLabel}`, 'test');
     }
 }
 
@@ -420,6 +566,10 @@ function startMonitoring() {
     monitoringInterval = setInterval(checkTimers, 1000);
     
     logStatus('Started monitoring timers...');
+    console.log('Monitoring started. Current timers:', timers);
+    
+    // Add visual indicator
+    document.body.classList.add('monitoring-active');
 }
 
 function stopMonitoring() {
@@ -435,14 +585,24 @@ function stopMonitoring() {
     }
     
     logStatus('Stopped monitoring timers');
+    
+    // Remove visual indicator
+    document.body.classList.remove('monitoring-active');
 }
 
 function checkTimers() {
     const now = new Date();
     const currentTime = formatTime(now);
     
+    // Debug: Log current time every 5 seconds
+    if (now.getSeconds() % 5 === 0) {
+        console.log('Current time:', currentTime);
+        console.log('Timers:', timers.map(t => ({ id: t.id, startTime: t.startTime, match: t.startTime === currentTime })));
+    }
+    
     timers.forEach((timer, index) => {
         if (timer.startTime && timer.startTime === currentTime) {
+            console.log('Timer triggered!', timer);
             triggerTimer(timer, index);
         }
     });
@@ -455,11 +615,17 @@ function triggerTimer(timer, index) {
     // Apply theme
     applyTheme(timer.theme);
     
+    // Show 4D swirl overlay with selected type
+    const overlayType = timer.overlay || 'colorful';
+    console.log(`Triggering timer ${index + 1} with overlay:`, overlayType, 'Timer state:', timer);
+    showTimerOverlay(overlayType);
+    
     // Log the event
     const soundLabel = SOUND_MANIFEST.find(s => s.id === timer.sound)?.label || timer.sound;
     const themeLabel = THEME_MANIFEST.find(t => t.id === timer.theme)?.label || timer.theme;
+    const overlayLabel = OVERLAY_MANIFEST.find(o => o.id === overlayType)?.label || overlayType;
     
-    logStatus(`🎵 Timer ${index + 1} TRIGGERED! Sound: ${soundLabel}, Theme: ${themeLabel}`, 'trigger');
+    logStatus(`🎵 Timer ${index + 1} TRIGGERED! Sound: ${soundLabel}, Theme: ${themeLabel}, Overlay: ${overlayLabel}`, 'trigger');
     
     // Reset timer to prevent multiple triggers
     timer.startTime = '';

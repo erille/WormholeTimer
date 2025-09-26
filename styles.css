@@ -13,6 +13,20 @@ body {
     transition: all 0.5s ease;
 }
 
+body.monitoring-active {
+    box-shadow: inset 0 0 50px rgba(40, 167, 69, 0.3);
+    animation: monitoringPulse 2s ease-in-out infinite;
+}
+
+@keyframes monitoringPulse {
+    0%, 100% {
+        box-shadow: inset 0 0 50px rgba(40, 167, 69, 0.3);
+    }
+    50% {
+        box-shadow: inset 0 0 100px rgba(40, 167, 69, 0.6);
+    }
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -73,7 +87,7 @@ main {
 
 .timer-row {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr auto;
     gap: 20px;
     align-items: center;
     padding: 20px;
@@ -246,6 +260,11 @@ main {
 .status-toggle {
     text-align: center;
     margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
 }
 
 .toggle-status-btn {
@@ -257,10 +276,62 @@ main {
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
+    margin: 0;
 }
 
 .toggle-status-btn:hover {
     background: #5a6268;
+    transform: translateY(-2px);
+}
+
+.test-overlay-btn {
+    background: #17a2b8;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0;
+}
+
+.test-overlay-btn:hover {
+    background: #138496;
+    transform: translateY(-2px);
+}
+
+.test-timer-btn {
+    background: #fd7e14;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0;
+}
+
+.test-timer-btn:hover {
+    background: #e8650e;
+    transform: translateY(-2px);
+}
+
+.test-monitoring-btn {
+    background: #6f42c1;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0;
+}
+
+.test-monitoring-btn:hover {
+    background: #5a32a3;
     transform: translateY(-2px);
 }
 
@@ -269,6 +340,10 @@ main {
     border-radius: 15px;
     padding: 25px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    margin-top: 0;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    overflow: hidden;
 }
 
 .status-panel h3 {
@@ -298,19 +373,15 @@ main {
     border-bottom: none;
 }
 
-.controls {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-}
 
 .start-btn, .stop-btn {
     padding: 12px 25px;
     border: none;
     border-radius: 25px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
+    margin: 0;
 }
 
 .start-btn {
@@ -693,6 +764,13 @@ body.theme-twilight-zone h1 {
     font-size: 1rem;
 }
 
+.wheel-container label::after {
+    content: " (click or scroll)";
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: normal;
+}
+
 .wheel {
     height: 200px;
     overflow-y: auto;
@@ -720,11 +798,15 @@ body.theme-twilight-zone h1 {
     transition: all 0.3s ease;
     font-family: 'Courier New', monospace;
     position: relative;
+    border-radius: 6px;
+    margin: 2px 0;
 }
 
 .wheel-item:hover {
-    background: rgba(0, 123, 255, 0.1);
+    background: rgba(0, 123, 255, 0.15);
     color: #007bff;
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
 }
 
 .wheel-item.active {
@@ -733,6 +815,11 @@ body.theme-twilight-zone h1 {
     font-size: 1.4rem;
     box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
     transform: scale(1.05);
+}
+
+.wheel-item:active {
+    transform: scale(0.95);
+    background: rgba(0, 123, 255, 0.3);
 }
 
 /* Add visual indicators for the center selection area */
@@ -796,6 +883,196 @@ body.theme-twilight-zone h1 {
     transform: translateY(-2px);
 }
 
+/* Timer Overlay Styles */
+.timer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.timer-overlay.show {
+    opacity: 1;
+}
+
+.swirl-container {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swirl-4d {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 0deg,
+        #ff0080 0deg,
+        #00ff80 60deg,
+        #8000ff 120deg,
+        #ff8000 180deg,
+        #ff0080 240deg,
+        #00ff80 300deg,
+        #8000ff 360deg
+    );
+    position: relative;
+    animation: swirl4D 2s ease-in-out infinite;
+    box-shadow: 
+        0 0 50px rgba(255, 0, 128, 0.5),
+        0 0 100px rgba(0, 255, 128, 0.3),
+        0 0 150px rgba(128, 0, 255, 0.2);
+}
+
+.swirl-4d::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    background: conic-gradient(
+        from 180deg,
+        #00ffff 0deg,
+        #ffff00 60deg,
+        #ff00ff 120deg,
+        #00ff00 180deg,
+        #00ffff 240deg,
+        #ffff00 300deg,
+        #ff00ff 360deg
+    );
+    border-radius: 50%;
+    transform: translate(-50%, -50%) rotate(180deg);
+    animation: swirl4DReverse 1.5s ease-in-out infinite;
+}
+
+.swirl-4d::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(
+        circle,
+        #ffffff 0%,
+        #ff0080 30%,
+        #00ff80 60%,
+        #8000ff 100%
+    );
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: swirl4DCenter 1s ease-in-out infinite;
+}
+
+/* Monochrome overlay styles */
+.swirl-4d.monochrome {
+    background: conic-gradient(
+        from 0deg,
+        #000000 0deg,
+        #333333 60deg,
+        #666666 120deg,
+        #999999 180deg,
+        #cccccc 240deg,
+        #ffffff 300deg,
+        #000000 360deg
+    );
+    box-shadow: 
+        0 0 50px rgba(0, 0, 0, 0.5),
+        0 0 100px rgba(128, 128, 128, 0.3),
+        0 0 150px rgba(255, 255, 255, 0.2);
+}
+
+.swirl-4d.monochrome::before {
+    background: conic-gradient(
+        from 180deg,
+        #ffffff 0deg,
+        #cccccc 60deg,
+        #999999 120deg,
+        #666666 180deg,
+        #333333 240deg,
+        #000000 300deg,
+        #ffffff 360deg
+    );
+}
+
+.swirl-4d.monochrome::after {
+    background: radial-gradient(
+        circle,
+        #ffffff 0%,
+        #cccccc 30%,
+        #666666 60%,
+        #000000 100%
+    );
+}
+
+@keyframes swirl4D {
+    0% {
+        transform: rotate(0deg) scale(1);
+        filter: hue-rotate(0deg);
+    }
+    25% {
+        transform: rotate(90deg) scale(1.1);
+        filter: hue-rotate(90deg);
+    }
+    50% {
+        transform: rotate(180deg) scale(1.2);
+        filter: hue-rotate(180deg);
+    }
+    75% {
+        transform: rotate(270deg) scale(1.1);
+        filter: hue-rotate(270deg);
+    }
+    100% {
+        transform: rotate(360deg) scale(1);
+        filter: hue-rotate(360deg);
+    }
+}
+
+@keyframes swirl4DReverse {
+    0% {
+        transform: translate(-50%, -50%) rotate(180deg) scale(1);
+    }
+    25% {
+        transform: translate(-50%, -50%) rotate(90deg) scale(0.9);
+    }
+    50% {
+        transform: translate(-50%, -50%) rotate(0deg) scale(0.8);
+    }
+    75% {
+        transform: translate(-50%, -50%) rotate(-90deg) scale(0.9);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(-180deg) scale(1);
+    }
+}
+
+@keyframes swirl4DCenter {
+    0% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.5) rotate(180deg);
+        opacity: 0.7;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1) rotate(360deg);
+        opacity: 1;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
@@ -831,9 +1108,11 @@ body.theme-twilight-zone h1 {
         text-align: center;
     }
     
-    .controls {
+    .status-toggle {
         flex-direction: column;
+        gap: 10px;
     }
+    
     
     .modal-content {
         width: 95%;
@@ -856,5 +1135,25 @@ body.theme-twilight-zone h1 {
     
     .wheel-item.active {
         font-size: 1.2rem;
+    }
+    
+    .swirl-container {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .swirl-4d {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .swirl-4d::before {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .swirl-4d::after {
+        width: 60px;
+        height: 60px;
     }
 }
