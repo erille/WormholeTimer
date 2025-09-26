@@ -1,0 +1,860 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+    min-height: 100vh;
+    transition: all 0.5s ease;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 3rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    margin-bottom: 10px;
+}
+
+main {
+    display: grid;
+    gap: 30px;
+}
+
+.timers-panel {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.panel-header h2 {
+    color: #333;
+    font-size: 1.8rem;
+}
+
+.add-timer-btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.add-timer-btn:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+}
+
+.timer-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 20px;
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.timer-row:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.timer-row input,
+.timer-row select {
+    padding: 12px 16px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #ffffff;
+    transition: all 0.3s ease;
+    width: 100%;
+    height: 48px;
+    box-sizing: border-box;
+}
+
+.timer-row input:focus,
+.timer-row select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.timer-row label {
+    display: block;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Time display styling */
+.time-display {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 48px;
+    box-sizing: border-box;
+}
+
+.time-display:hover {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.time-text {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #495057;
+    font-family: 'Courier New', monospace;
+    flex: 1;
+}
+
+.edit-time-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    margin-left: 8px;
+}
+
+.edit-time-btn:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+}
+
+.test-btn {
+    background: #28a745;
+    color: white;
+    border: 1px solid #28a745;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.test-btn:hover {
+    background: #218838;
+    border-color: #218838;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.test-btn::before {
+    content: "▶";
+    font-size: 0.8rem;
+}
+
+.remove-btn {
+    background: #dc3545;
+    color: white;
+    border: 1px solid #dc3545;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.remove-btn:hover {
+    background: #c82333;
+    border-color: #c82333;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.remove-btn::before {
+    content: "×";
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Action buttons container */
+.timer-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    height: 48px;
+}
+
+.timer-actions .test-btn,
+.timer-actions .remove-btn {
+    flex-shrink: 0;
+    height: 40px;
+    width: 40px;
+}
+
+/* Status toggle button */
+.status-toggle {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.toggle-status-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggle-status-btn:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+.status-panel {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.status-panel h3 {
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.status-log {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 15px;
+    min-height: 150px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.status-log p {
+    margin-bottom: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.status-log p:last-child {
+    border-bottom: none;
+}
+
+.controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.start-btn, .stop-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.start-btn {
+    background: #28a745;
+    color: white;
+}
+
+.start-btn:hover:not(:disabled) {
+    background: #218838;
+    transform: translateY(-2px);
+}
+
+.stop-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.stop-btn:hover:not(:disabled) {
+    background: #c82333;
+    transform: translateY(-2px);
+}
+
+.start-btn:disabled, .stop-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Log message styles */
+.log-test {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.log-trigger {
+    color: #28a745;
+    font-weight: bold;
+    background: rgba(40, 167, 69, 0.1);
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.log-theme {
+    color: #6f42c1;
+    font-weight: bold;
+}
+
+.log-error {
+    color: #dc3545;
+    font-weight: bold;
+    background: rgba(220, 53, 69, 0.1);
+    padding: 5px;
+    border-radius: 5px;
+}
+
+/* ===== THEMES ===== */
+
+/* Theme 1: Neon Cyber */
+body.theme-neon-cyber {
+    background: linear-gradient(45deg, #ff0080, #00ff80, #8000ff, #ff8000);
+    background-size: 400% 400%;
+    animation: neonPulse 3s ease-in-out infinite;
+    color: #00ffff;
+}
+
+@keyframes neonPulse {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Theme 2: Electric Storm */
+body.theme-electric-storm {
+    background: linear-gradient(135deg, #1e3c72, #2a5298, #ff6b6b, #4ecdc4);
+    background-size: 300% 300%;
+    animation: electricStorm 4s ease-in-out infinite;
+    color: #ffff00;
+}
+
+@keyframes electricStorm {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Theme 3: Psychedelic Rainbow */
+body.theme-psychedelic-rainbow {
+    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080);
+    background-size: 200% 200%;
+    animation: rainbowSpin 5s linear infinite;
+    color: #ffffff;
+}
+
+@keyframes rainbowSpin {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+/* Theme 4: Cosmic Purple */
+body.theme-cosmic-purple {
+    background: radial-gradient(circle, #8b5cf6, #a855f7, #c084fc, #e879f9, #f0abfc);
+    animation: cosmicPulse 3s ease-in-out infinite;
+    color: #fbbf24;
+}
+
+@keyframes cosmicPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Theme 5: Neon Matrix */
+body.theme-neon-matrix {
+    background: linear-gradient(90deg, #000000, #00ff00, #000000, #00ff00);
+    background-size: 20px 20px;
+    animation: matrixFlow 2s linear infinite;
+    color: #00ff00;
+}
+
+@keyframes matrixFlow {
+    0% { background-position: 0 0; }
+    100% { background-position: 20px 20px; }
+}
+
+/* Theme 6: Fire & Ice */
+body.theme-fire-ice {
+    background: linear-gradient(45deg, #ff4500, #ff6347, #00bfff, #1e90ff, #4169e1);
+    background-size: 300% 300%;
+    animation: fireIce 4s ease-in-out infinite;
+    color: #ffffff;
+}
+
+@keyframes fireIce {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Theme 7: Galaxy Spiral */
+body.theme-galaxy-spiral {
+    background: radial-gradient(ellipse at center, #1a1a2e, #16213e, #0f3460, #533483, #7209b7);
+    animation: galaxyRotate 6s linear infinite;
+    color: #e94560;
+}
+
+@keyframes galaxyRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Theme 8: Neon Jungle */
+body.theme-neon-jungle {
+    background: linear-gradient(135deg, #00ff41, #00d4aa, #ff6b35, #f7931e, #ffd23f);
+    background-size: 400% 400%;
+    animation: junglePulse 3s ease-in-out infinite;
+    color: #8b5cf6;
+}
+
+@keyframes junglePulse {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Theme 9: Digital Dreams */
+body.theme-digital-dreams {
+    background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+    background-size: 300% 300%;
+    animation: digitalDreams 5s ease-in-out infinite;
+    color: #ffffff;
+}
+
+@keyframes digitalDreams {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Theme 10: Electric Blue */
+body.theme-electric-blue {
+    background: linear-gradient(135deg, #00c6ff, #0072ff, #667eea, #764ba2);
+    background-size: 200% 200%;
+    animation: electricBlue 3s ease-in-out infinite;
+    color: #ffff00;
+}
+
+@keyframes electricBlue {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Theme 11: Neon Sunset */
+body.theme-neon-sunset {
+    background: linear-gradient(45deg, #ff9a9e, #fecfef, #fecfef, #ff9a9e, #ff6b6b, #ee5a24);
+    background-size: 300% 300%;
+    animation: neonSunset 4s ease-in-out infinite;
+    color: #2c2c54;
+}
+
+@keyframes neonSunset {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Theme 12: Cyber Punk */
+body.theme-cyber-punk {
+    background: linear-gradient(90deg, #0f0f23, #1a1a2e, #16213e, #0f3460, #533483);
+    background-size: 200% 200%;
+    animation: cyberPunk 3s ease-in-out infinite;
+    color: #00ff9f;
+}
+
+@keyframes cyberPunk {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Theme 13: Rainbow Explosion */
+body.theme-rainbow-explosion {
+    background: radial-gradient(circle, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080);
+    background-size: 100% 100%;
+    animation: rainbowExplosion 2s ease-in-out infinite;
+    color: #ffffff;
+}
+
+@keyframes rainbowExplosion {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(180deg); }
+}
+
+/* Theme 14: Neon Ocean */
+body.theme-neon-ocean {
+    background: linear-gradient(135deg, #00c9ff, #92fe9d, #00c9ff, #92fe9d, #00c9ff);
+    background-size: 300% 300%;
+    animation: neonOcean 4s ease-in-out infinite;
+    color: #ff6b6b;
+}
+
+@keyframes neonOcean {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Theme 15: Twilight Zone */
+body.theme-twilight-zone {
+    background: radial-gradient(circle at center, #000000, #1a1a1a, #333333, #000000);
+    background-size: 200% 200%;
+    animation: twilightVortex 8s linear infinite;
+    color: #ffffff;
+}
+
+@keyframes twilightVortex {
+    0% { 
+        background-position: 0% 0%;
+        transform: rotate(0deg);
+    }
+    50% { 
+        background-position: 100% 100%;
+        transform: rotate(180deg);
+    }
+    100% { 
+        background-position: 0% 0%;
+        transform: rotate(360deg);
+    }
+}
+
+/* Theme 16: Pastel Minimal */
+body.theme-pastel-minimal {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef, #dee2e6, #ced4da);
+    color: #6c757d;
+    animation: none;
+}
+
+/* Theme-specific text shadows for better readability */
+body.theme-neon-cyber h1,
+body.theme-electric-storm h1,
+body.theme-psychedelic-rainbow h1,
+body.theme-cosmic-purple h1,
+body.theme-neon-matrix h1,
+body.theme-fire-ice h1,
+body.theme-galaxy-spiral h1,
+body.theme-neon-jungle h1,
+body.theme-digital-dreams h1,
+body.theme-electric-blue h1,
+body.theme-neon-sunset h1,
+body.theme-cyber-punk h1,
+body.theme-rainbow-explosion h1,
+body.theme-neon-ocean h1,
+body.theme-twilight-zone h1 {
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 0;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 2px solid #e9ecef;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 15px 15px 0 0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.modal-body {
+    padding: 25px;
+}
+
+.time-wheels {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    align-items: center;
+}
+
+.wheel-container {
+    text-align: center;
+    flex: 1;
+}
+
+.wheel-container label {
+    display: block;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.wheel {
+    height: 200px;
+    overflow-y: auto;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    background: #f8f9fa;
+    position: relative;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.wheel::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.wheel-item {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Courier New', monospace;
+    position: relative;
+}
+
+.wheel-item:hover {
+    background: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+}
+
+.wheel-item.active {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    font-size: 1.4rem;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+    transform: scale(1.05);
+}
+
+/* Add visual indicators for the center selection area */
+.wheel::before,
+.wheel::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 40px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.wheel::before {
+    top: 80px;
+    border-top: 2px solid #007bff;
+    background: linear-gradient(to bottom, rgba(0, 123, 255, 0.1), transparent);
+}
+
+.wheel::after {
+    bottom: 80px;
+    border-bottom: 2px solid #007bff;
+    background: linear-gradient(to top, rgba(0, 123, 255, 0.1), transparent);
+}
+
+.modal-footer {
+    display: flex;
+    gap: 15px;
+    padding: 20px 25px;
+    border-top: 2px solid #e9ecef;
+    justify-content: flex-end;
+}
+
+.set-time-btn, .cancel-time-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.set-time-btn {
+    background: #28a745;
+    color: white;
+}
+
+.set-time-btn:hover {
+    background: #218838;
+    transform: translateY(-2px);
+}
+
+.cancel-time-btn {
+    background: #6c757d;
+    color: white;
+}
+
+.cancel-time-btn:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .timer-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .timer-actions {
+        flex-direction: row;
+        gap: 8px;
+        height: 48px;
+    }
+    
+    .timer-actions .test-btn,
+    .timer-actions .remove-btn {
+        height: 40px;
+        width: 40px;
+        flex-shrink: 0;
+    }
+    
+    .panel-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .controls {
+        flex-direction: column;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+    }
+    
+    .time-wheels {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .wheel {
+        height: 150px;
+    }
+    
+    .wheel-item {
+        height: 35px;
+        font-size: 1rem;
+    }
+    
+    .wheel-item.active {
+        font-size: 1.2rem;
+    }
+}
