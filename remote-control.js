@@ -204,7 +204,9 @@ function sendPDFCommand(pdfAction, buttonElement) {
     if (webrtcConnection.socket && webrtcConnection.socket.connected) {
         webrtcConnection.socket.emit('remote-command', {
             command: 'pdf-action',
-            action: pdfAction
+            action: pdfAction,
+            from: 'remote-control',
+            timestamp: Date.now()
         });
         console.log(`Sent PDF command: ${pdfAction}`);
     } else {

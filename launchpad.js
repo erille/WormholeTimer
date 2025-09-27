@@ -285,7 +285,7 @@ function handlePDFAction(action) {
     console.log(`handlePDFAction called with action: ${action}`);
     
     const overlay = document.getElementById('pdf-overlay');
-    if (!overlay || overlay.style.display === 'none') {
+    if (!overlay || overlay.style.display === 'none' || !overlay.classList.contains('show')) {
         console.log('PDF overlay not visible, ignoring action');
         return;
     }
