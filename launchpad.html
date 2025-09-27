@@ -9,13 +9,27 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Wormhole Launchpad</h1>
-            <p>Soundboard - Press buttons to trigger overlays</p>
-        </header>
+        <!-- Flyer Image -->
+        <div class="flyer-container">
+            <img src="img/flyer.jpg" alt="Voyage à travers le multivers" class="flyer-image">
+        </div>
+
+        <!-- Section Toggle Buttons -->
+        <div class="section-toggle">
+            <button id="soundboard-toggle" class="section-btn active" data-section="soundboard">
+                <span class="btn-icon">🎹</span>
+                <span class="btn-label">SOUNDBOARD</span>
+            </button>
+            <button id="server-toggle" class="section-btn" data-section="server">
+                <span class="btn-icon">🖥️</span>
+                <span class="btn-label">SERVER</span>
+            </button>
+        </div>
 
         <main>
-            <div class="launchpad-grid">
+            <!-- Soundboard Section -->
+            <div id="soundboard-section" class="content-section active">
+                <div class="launchpad-grid">
                 <!-- Button for 123 Soleil -->
                 <button class="launchpad-btn" data-overlay="123soleil">
                     <div class="btn-icon">☀️</div>
@@ -114,9 +128,12 @@
                     <div class="btn-icon">🎭</div>
                     <div class="btn-label">Soju Solo</div>
                 </button>
+                </div>
             </div>
 
-            <div class="connection-panel">
+            <!-- Server Section -->
+            <div id="server-section" class="content-section">
+                <div class="connection-panel">
                 <h3>Remote Control</h3>
                 <div class="connection-status" id="connection-status">
                     <span class="status-indicator" id="status-indicator">●</span>
@@ -131,6 +148,7 @@
                 <div class="connection-info" id="connection-info" style="display: none;">
                     <p>Remote control ready!</p>
                     <p>Visit: <span id="remote-url"></span></p>
+                </div>
                 </div>
             </div>
 

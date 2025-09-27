@@ -46,7 +46,44 @@ function initializeLaunchpad() {
     console.log('Wormhole Launchpad initialized. Ready to trigger overlays!');
 }
 
+function switchSection(sectionName) {
+    // Hide all sections
+    const sections = document.querySelectorAll('.content-section');
+    sections.forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Remove active class from all section buttons
+    const sectionButtons = document.querySelectorAll('.section-btn');
+    sectionButtons.forEach(button => {
+        button.classList.remove('active');
+    });
+    
+    // Show selected section
+    const targetSection = document.getElementById(`${sectionName}-section`);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    }
+    
+    // Add active class to clicked button
+    const activeButton = document.querySelector(`[data-section="${sectionName}"]`);
+    if (activeButton) {
+        activeButton.classList.add('active');
+    }
+    
+    console.log(`Switched to ${sectionName} section`);
+}
+
 function setupLaunchpadEventListeners() {
+    // Section toggle events
+    const sectionButtons = document.querySelectorAll('.section-btn');
+    sectionButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const section = this.dataset.section;
+            switchSection(section);
+        });
+    });
+    
     // Launchpad button events
     const launchpadButtons = document.querySelectorAll('.launchpad-btn');
     launchpadButtons.forEach(button => {
