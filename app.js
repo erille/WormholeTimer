@@ -50,7 +50,8 @@ const SECOND_OVERLAY_MANIFEST = [
     { id: 'kawibawibo', label: 'Kawi Bawi Bo', file: 'img/kawibawibo.png' },
     { id: 'miaou', label: 'Miaou', file: 'img/Miaou.png' },
     { id: 'mime', label: 'Mime', file: 'img/Mime.png' },
-    { id: 'dance', label: 'Dance', file: 'img/Dance.png' }
+    { id: 'dance', label: 'Dance', file: 'img/Dance.png' },
+    { id: 'mix', label: 'Mix', file: 'img/mix.png' }
 ];
 
 // Global state
