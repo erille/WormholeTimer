@@ -22,6 +22,10 @@ const SECOND_OVERLAY_MANIFEST = [
 let audioContext = null;
 let webrtcConnection = null;
 let isServerMode = false;
+let activeTimers = {
+    '5min': null,
+    '30s': null
+};
 
 // Initialize the launchpad when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -48,7 +52,13 @@ function setupLaunchpadEventListeners() {
     launchpadButtons.forEach(button => {
         button.addEventListener('click', function() {
             const overlayType = this.dataset.overlay;
-            triggerLaunchpadOverlay(overlayType, this);
+            const timerType = this.dataset.timer;
+            
+            if (overlayType) {
+                triggerLaunchpadOverlay(overlayType, this);
+            } else if (timerType) {
+                triggerTimerOverlay(timerType, this);
+            }
         });
     });
     
@@ -86,6 +96,87 @@ function triggerLaunchpadOverlay(overlayType, buttonElement) {
     }, 9000); // Show second overlay after first overlay duration
     
     console.log(`Launchpad triggered: ${overlayType}`);
+}
+
+function triggerTimerOverlay(timerType, buttonElement) {
+    // Add active class for visual feedback
+    buttonElement.classList.add('active');
+    
+    // Remove active class after animation
+    setTimeout(() => {
+        buttonElement.classList.remove('active');
+    }, 600);
+    
+    // Play Portal sound
+    playSound('portal');
+    
+    // Start the timer overlay
+    startTimerOverlay(timerType);
+    
+    console.log(`Timer triggered: ${timerType}`);
+}
+
+function startTimerOverlay(timerType) {
+    // Stop any existing timer of the same type
+    if (activeTimers[timerType]) {
+        clearInterval(activeTimers[timerType]);
+        activeTimers[timerType] = null;
+    }
+    
+    // Get timer configuration
+    const timerConfig = getTimerConfig(timerType);
+    let timeLeft = timerConfig.duration;
+    
+    // Show the timer overlay
+    const overlay = document.getElementById(`timer-overlay-${timerType}`);
+    const display = document.getElementById(`timer-${timerType}-display`);
+    const progress = document.getElementById(`progress-${timerType}`);
+    
+    overlay.classList.add('show');
+    
+    // Update display and progress
+    updateTimerDisplay(display, timeLeft);
+    updateTimerProgress(progress, timeLeft, timerConfig.duration);
+    
+    // Start countdown
+    activeTimers[timerType] = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay(display, timeLeft);
+        updateTimerProgress(progress, timeLeft, timerConfig.duration);
+        
+        if (timeLeft <= 0) {
+            // Timer finished
+            clearInterval(activeTimers[timerType]);
+            activeTimers[timerType] = null;
+            
+            // Hide overlay after a short delay
+            setTimeout(() => {
+                overlay.classList.remove('show');
+            }, 1000);
+        }
+    }, 1000);
+}
+
+function getTimerConfig(timerType) {
+    const configs = {
+        '5min': { duration: 300, label: '5 MINUTES' }, // 5 minutes = 300 seconds
+        '30s': { duration: 30, label: '30 SECONDS' }   // 30 seconds
+    };
+    return configs[timerType];
+}
+
+function updateTimerDisplay(displayElement, timeLeft) {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    displayElement.textContent = formattedTime;
+}
+
+function updateTimerProgress(progressElement, timeLeft, totalTime) {
+    const progress = (totalTime - timeLeft) / totalTime;
+    const circumference = 2 * Math.PI * 90; // radius = 90
+    const offset = circumference - (progress * circumference);
+    progressElement.style.strokeDashoffset = offset;
 }
 
 function testAllOverlays() {

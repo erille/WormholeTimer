@@ -310,6 +310,192 @@
     text-shadow: 0 0 10px rgba(144, 238, 144, 0.5);
 }
 
+/* Timer Overlay Styles - Neon Wormhole Theme */
+.timer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, 
+        rgba(0, 0, 0, 0.95) 0%, 
+        rgba(0, 0, 0, 0.98) 50%, 
+        rgba(0, 0, 0, 1) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s ease;
+}
+
+.timer-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.timer-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: timerGlow 2s ease-in-out infinite alternate;
+}
+
+.timer-circle {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center,
+        rgba(0, 255, 255, 0.1) 0%,
+        rgba(255, 0, 255, 0.1) 50%,
+        rgba(0, 0, 0, 0.8) 100%);
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 
+        0 0 50px rgba(0, 255, 255, 0.5),
+        0 0 100px rgba(255, 0, 255, 0.3),
+        inset 0 0 50px rgba(0, 255, 255, 0.1);
+    animation: timerPulse 3s ease-in-out infinite;
+}
+
+.timer-display {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #00ffff;
+    text-shadow: 
+        0 0 10px #00ffff,
+        0 0 20px #00ffff,
+        0 0 30px #00ffff;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+    animation: textFlicker 0.5s ease-in-out infinite alternate;
+}
+
+.timer-label {
+    font-size: 1.2rem;
+    color: #ff00ff;
+    text-shadow: 
+        0 0 10px #ff00ff,
+        0 0 20px #ff00ff;
+    font-weight: bold;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.timer-progress {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+.progress-ring-svg {
+    transform: rotate(-90deg);
+}
+
+.progress-ring-circle-bg {
+    fill: none;
+    stroke: rgba(255, 0, 255, 0.2);
+    stroke-width: 8;
+}
+
+.progress-ring-circle {
+    fill: none;
+    stroke: #00ffff;
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 565.48;
+    stroke-dashoffset: 565.48;
+    filter: drop-shadow(0 0 10px #00ffff);
+    transition: stroke-dashoffset 1s ease;
+}
+
+/* Timer Button Styles */
+.timer-btn {
+    background: linear-gradient(135deg, #00ffff, #ff00ff) !important;
+    border: 2px solid #00ffff !important;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.5),
+        0 0 40px rgba(255, 0, 255, 0.3) !important;
+}
+
+.timer-btn:hover {
+    background: linear-gradient(135deg, #ff00ff, #00ffff) !important;
+    box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.8),
+        0 0 60px rgba(255, 0, 255, 0.5) !important;
+    transform: translateY(-3px) scale(1.05) !important;
+}
+
+.timer-btn .btn-icon {
+    text-shadow: 0 0 10px currentColor;
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes timerGlow {
+    0% {
+        filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5));
+    }
+    100% {
+        filter: drop-shadow(0 0 40px rgba(255, 0, 255, 0.8));
+    }
+}
+
+@keyframes timerPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 
+            0 0 50px rgba(0, 255, 255, 0.5),
+            0 0 100px rgba(255, 0, 255, 0.3),
+            inset 0 0 50px rgba(0, 255, 255, 0.1);
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: 
+            0 0 80px rgba(0, 255, 255, 0.8),
+            0 0 150px rgba(255, 0, 255, 0.5),
+            inset 0 0 80px rgba(0, 255, 255, 0.2);
+    }
+}
+
+@keyframes textFlicker {
+    0% {
+        text-shadow: 
+            0 0 10px #00ffff,
+            0 0 20px #00ffff,
+            0 0 30px #00ffff;
+    }
+    100% {
+        text-shadow: 
+            0 0 5px #00ffff,
+            0 0 15px #00ffff,
+            0 0 25px #00ffff,
+            0 0 35px #ff00ff;
+    }
+}
+
+@keyframes iconPulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 5px currentColor);
+    }
+    50% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 15px currentColor);
+    }
+}
+
 .connection-info {
     text-align: center;
     padding: 20px;

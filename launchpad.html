@@ -81,6 +81,18 @@
                     <div class="btn-icon">💃</div>
                     <div class="btn-label">Dance</div>
                 </button>
+
+                <!-- Button for 5 Minutes Timer -->
+                <button class="launchpad-btn timer-btn" data-timer="5min">
+                    <div class="btn-icon">⏰</div>
+                    <div class="btn-label">5 Minutes</div>
+                </button>
+
+                <!-- Button for 30 Seconds Timer -->
+                <button class="launchpad-btn timer-btn" data-timer="30s">
+                    <div class="btn-icon">⚡</div>
+                    <div class="btn-label">30 Seconds</div>
+                </button>
             </div>
 
             <div class="connection-panel">
@@ -183,6 +195,41 @@
     <div id="second-overlay-dance" class="second-overlay">
         <div class="image-container">
             <img src="img/Dance.png" alt="Dance" class="overlay-image">
+        </div>
+    </div>
+
+    <!-- Timer Overlays -->
+    <div id="timer-overlay-5min" class="timer-overlay">
+        <div class="timer-container">
+            <div class="timer-circle">
+                <div class="timer-display" id="timer-5min-display">05:00</div>
+                <div class="timer-label">5 MINUTES</div>
+            </div>
+            <div class="timer-progress">
+                <div class="progress-ring">
+                    <svg class="progress-ring-svg" width="200" height="200">
+                        <circle class="progress-ring-circle-bg" cx="100" cy="100" r="90"></circle>
+                        <circle class="progress-ring-circle" cx="100" cy="100" r="90" id="progress-5min"></circle>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="timer-overlay-30s" class="timer-overlay">
+        <div class="timer-container">
+            <div class="timer-circle">
+                <div class="timer-display" id="timer-30s-display">00:30</div>
+                <div class="timer-label">30 SECONDS</div>
+            </div>
+            <div class="timer-progress">
+                <div class="progress-ring">
+                    <svg class="progress-ring-svg" width="200" height="200">
+                        <circle class="progress-ring-circle-bg" cx="100" cy="100" r="90"></circle>
+                        <circle class="progress-ring-circle" cx="100" cy="100" r="90" id="progress-30s"></circle>
+                    </svg>
+                </div>
+            </div>
         </div>
     </div>
 
