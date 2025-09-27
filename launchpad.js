@@ -464,11 +464,25 @@ async function startServer() {
             updateServerToggleButton('connected');
         };
         
+        console.log('Initializing WebRTC connection as server...');
         await webrtcConnection.initialize(true); // true = initiator (server)
+        
+        console.log('Starting WebRTC connection...');
         await webrtcConnection.startConnection();
         
-        // Update UI
-        updateServerToggleButton('connecting');
+        // Wait a bit for the connection to stabilize
+        setTimeout(() => {
+            if (webrtcConnection && webrtcConnection.socket && webrtcConnection.socket.connected) {
+                updateConnectionStatus('connected', 'Server ready for remote connections');
+                updateServerToggleButton('connected');
+                showConnectionInfo();
+                console.log('Server started successfully and ready for connections');
+            } else {
+                console.error('Server connection not stable, retrying...');
+                updateConnectionStatus('connecting', 'Stabilizing connection...');
+                updateServerToggleButton('connecting');
+            }
+        }, 2000);
         
     } catch (error) {
         console.error('Error starting server:', error);
