@@ -84,14 +84,14 @@ function triggerLaunchpadOverlay(overlayType, buttonElement) {
         buttonElement.classList.remove('active');
     }, 600);
     
-    // Play Portal sound
-    playSound('portal');
-    
     // Check if it's the sojugroup video overlay
     if (overlayType === 'sojugroup') {
-        // Show sojugroup video overlay directly
+        // Show sojugroup video overlay directly (no sound)
         showVideoOverlay('sojugroup');
     } else {
+        // Play Portal sound for regular overlays
+        playSound('portal');
+        
         // Show wormhole video overlay (9 seconds)
         showTimerOverlay('wormhole');
         
@@ -124,15 +124,10 @@ function showVideoOverlay(videoType) {
         console.error(`Error playing ${videoType} video:`, e);
     });
     
-    // Hide overlay when video ends
+    // Hide overlay when video ends (no time limit)
     video.addEventListener('ended', () => {
         hideVideoOverlay(videoType);
     }, { once: true });
-    
-    // Fallback: hide after 10 seconds if video doesn't end naturally
-    setTimeout(() => {
-        hideVideoOverlay(videoType);
-    }, 10000);
 }
 
 function hideVideoOverlay(videoType) {
@@ -166,10 +161,7 @@ function triggerTimerOverlay(timerType, buttonElement) {
         buttonElement.classList.remove('active');
     }, 600);
     
-    // Play Portal sound
-    playSound('portal');
-    
-    // Start the timer overlay
+    // Start the timer overlay (no sound for timers)
     startTimerOverlay(timerType);
     
     console.log(`Timer triggered: ${timerType}`);
