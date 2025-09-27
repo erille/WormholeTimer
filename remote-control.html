@@ -21,41 +21,46 @@
                     <span id="status-text">Disconnected</span>
                 </div>
                 <div class="connection-controls">
-                    <button id="connect-btn" class="control-btn">Connect to Launchpad</button>
-                    <button id="disconnect-btn" class="control-btn" disabled>Disconnect</button>
+                    <button id="connection-toggle" class="connection-toggle-btn">
+                        <span class="toggle-text">Connect</span>
+                        <span class="toggle-indicator">●</span>
+                    </button>
                 </div>
             </div>
 
             <div class="remote-control-grid">
-                <!-- Button for 123 Soleil -->
-                <button class="remote-btn" data-overlay="123soleil">
-                    <div class="btn-icon">☀️</div>
-                    <div class="btn-label">123 Soleil</div>
-                </button>
+                <!-- Row 1 -->
+                <div class="remote-row">
+                    <button class="remote-btn" data-overlay="123soleil">
+                        <div class="btn-icon">☀️</div>
+                        <div class="btn-label">123 Soleil</div>
+                    </button>
+                    <button class="remote-btn" data-overlay="A">
+                        <div class="btn-icon">🅰️</div>
+                        <div class="btn-label">A</div>
+                    </button>
+                </div>
 
-                <!-- Button for A -->
-                <button class="remote-btn" data-overlay="A">
-                    <div class="btn-icon">🅰️</div>
-                    <div class="btn-label">A</div>
-                </button>
+                <!-- Row 2 -->
+                <div class="remote-row">
+                    <button class="remote-btn" data-overlay="slowmotion">
+                        <div class="btn-icon">🐌</div>
+                        <div class="btn-label">Slow Motion</div>
+                    </button>
+                    <button class="remote-btn" data-overlay="sport">
+                        <div class="btn-icon">⚽</div>
+                        <div class="btn-label">Sport</div>
+                    </button>
+                </div>
 
-                <!-- Button for Slow Motion -->
-                <button class="remote-btn" data-overlay="slowmotion">
-                    <div class="btn-icon">🐌</div>
-                    <div class="btn-label">Slow Motion</div>
-                </button>
-
-                <!-- Button for Sport -->
-                <button class="remote-btn" data-overlay="sport">
-                    <div class="btn-icon">⚽</div>
-                    <div class="btn-label">Sport</div>
-                </button>
-
-                <!-- Button for Sing -->
-                <button class="remote-btn" data-overlay="sing">
-                    <div class="btn-icon">🎤</div>
-                    <div class="btn-label">Sing</div>
-                </button>
+                <!-- Row 3 -->
+                <div class="remote-row">
+                    <button class="remote-btn" data-overlay="sing">
+                        <div class="btn-icon">🎤</div>
+                        <div class="btn-label">Sing</div>
+                    </button>
+                    <div class="remote-btn-placeholder"></div>
+                </div>
             </div>
 
             <div class="remote-controls">

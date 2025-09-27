@@ -45,8 +45,15 @@ function setupRemoteControlEventListeners() {
     });
     
     // WebRTC connection events
-    document.getElementById('connect-btn').addEventListener('click', connectToLaunchpad);
-    document.getElementById('disconnect-btn').addEventListener('click', disconnectFromLaunchpad);
+    document.getElementById('connection-toggle').addEventListener('click', toggleConnection);
+}
+
+function toggleConnection() {
+    if (isConnected) {
+        disconnectFromLaunchpad();
+    } else {
+        connectToLaunchpad();
+    }
 }
 
 async function connectToLaunchpad() {
@@ -70,10 +77,12 @@ async function connectToLaunchpad() {
                 updateConnectionStatus('connected', 'Connected to launchpad');
                 isConnected = true;
                 updateButtonStates();
+                updateToggleButton('connected');
             } else if (state === 'disconnected') {
                 updateConnectionStatus('disconnected', 'Disconnected from launchpad');
                 isConnected = false;
                 updateButtonStates();
+                updateToggleButton('disconnected');
             }
         };
         
@@ -86,6 +95,7 @@ async function connectToLaunchpad() {
             updateConnectionStatus('disconnected', `Socket disconnected: ${reason}`);
             isConnected = false;
             updateButtonStates();
+            updateToggleButton('disconnected');
         };
         
         // Set up data channel handler
@@ -93,22 +103,21 @@ async function connectToLaunchpad() {
             updateConnectionStatus('connected', 'Connected to launchpad');
             isConnected = true;
             updateButtonStates();
+            updateToggleButton('connected');
         };
         
         await webrtcConnection.initialize(false); // false = not initiator (client)
         await webrtcConnection.startConnection();
         
         // Update UI
-        document.getElementById('connect-btn').disabled = true;
-        document.getElementById('disconnect-btn').disabled = false;
+        updateToggleButton('connecting');
         
     } catch (error) {
         console.error('Error connecting to launchpad:', error);
         updateConnectionStatus('disconnected', `Error: ${error.message}`);
         isConnected = false;
         updateButtonStates();
-        document.getElementById('connect-btn').disabled = false;
-        document.getElementById('disconnect-btn').disabled = true;
+        updateToggleButton('disconnected');
     }
 }
 
@@ -121,10 +130,7 @@ function disconnectFromLaunchpad() {
     isConnected = false;
     updateConnectionStatus('disconnected', 'Disconnected from launchpad');
     updateButtonStates();
-    
-    // Update UI
-    document.getElementById('connect-btn').disabled = false;
-    document.getElementById('disconnect-btn').disabled = true;
+    updateToggleButton('disconnected');
 }
 
 function sendRemoteCommand(overlayType, buttonElement) {
@@ -168,15 +174,41 @@ function testAllRemoteOverlays() {
 function updateConnectionStatus(status, text) {
     const indicator = document.getElementById('status-indicator');
     const statusText = document.getElementById('status-text');
-    
+
     indicator.className = 'status-indicator';
     if (status === 'connected') {
         indicator.classList.add('connected');
     } else if (status === 'connecting') {
         indicator.classList.add('connecting');
     }
-    
+
     statusText.textContent = text;
+}
+
+function updateToggleButton(status) {
+    const toggleBtn = document.getElementById('connection-toggle');
+    const toggleText = toggleBtn.querySelector('.toggle-text');
+    const toggleIndicator = toggleBtn.querySelector('.toggle-indicator');
+    
+    toggleBtn.className = 'connection-toggle-btn';
+    
+    switch (status) {
+        case 'connected':
+            toggleBtn.classList.add('connected');
+            toggleText.textContent = 'Disconnect';
+            toggleIndicator.textContent = '●';
+            break;
+        case 'connecting':
+            toggleBtn.classList.add('connecting');
+            toggleText.textContent = 'Connecting...';
+            toggleIndicator.textContent = '●';
+            break;
+        case 'disconnected':
+        default:
+            toggleText.textContent = 'Connect';
+            toggleIndicator.textContent = '●';
+            break;
+    }
 }
 
 function updateButtonStates() {

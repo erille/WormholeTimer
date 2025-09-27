@@ -156,26 +156,147 @@
     justify-content: center;
 }
 
+/* Connection Toggle Button */
+.connection-toggle-btn {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    min-width: 150px;
+    justify-content: center;
+}
+
+.connection-toggle-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.connection-toggle-btn.connected {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.connection-toggle-btn.connecting {
+    background: linear-gradient(135deg, #ffc107, #fd7e14);
+    animation: pulse 1s infinite;
+}
+
+.toggle-text {
+    font-size: 1rem;
+}
+
+.toggle-indicator {
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.connection-toggle-btn.connected .toggle-indicator {
+    color: #90EE90;
+    text-shadow: 0 0 10px rgba(144, 238, 144, 0.5);
+}
+
+/* Remote Control Grid - Mobile Layout */
+.remote-control-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 30px;
+    padding: 0 10px;
+}
+
+.remote-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.remote-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    border: none;
+    border-radius: 15px;
+    padding: 20px 15px;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 140px;
+    height: 120px;
+    min-width: 140px;
+}
+
+.remote-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.remote-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    background: linear-gradient(135deg, #ff5252, #ff7b3d);
+}
+
+.remote-btn .btn-icon {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+}
+
+.remote-btn .btn-label {
+    font-size: 0.9rem;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.remote-btn-placeholder {
+    width: 140px;
+    height: 120px;
+    min-width: 140px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .remote-control-grid {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        padding: 0 5px;
         gap: 15px;
-        padding: 15px;
+    }
+    
+    .remote-row {
+        gap: 15px;
     }
     
     .remote-btn {
-        min-height: 100px;
+        width: 120px;
+        height: 100px;
+        min-width: 120px;
         padding: 15px 10px;
     }
     
     .remote-btn .btn-icon {
         font-size: 2rem;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
     }
     
     .remote-btn .btn-label {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
+    }
+    
+    .remote-btn-placeholder {
+        width: 120px;
+        height: 100px;
+        min-width: 120px;
     }
     
     .remote-controls {
@@ -186,6 +307,11 @@
     
     .control-btn {
         width: 200px;
+    }
+    
+    .connection-toggle-btn {
+        min-width: 180px;
+        padding: 12px 25px;
     }
 }
 
