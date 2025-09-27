@@ -657,8 +657,8 @@ body {
 
 .pdf-container {
     position: relative;
-    width: 90%;
-    height: 90%;
+    width: 95%;
+    height: 95%;
     display: flex;
     flex-direction: column;
     background: #1A053A;
@@ -715,9 +715,9 @@ body {
 .pdf-viewer {
     flex: 1;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 5px;
 }
 
 #pdf-frame {
@@ -726,9 +726,6 @@ body {
     border: none;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-    zoom: 0.8;
-    transform: scale(0.8);
-    transform-origin: top left;
 }
 
 /* Animations */

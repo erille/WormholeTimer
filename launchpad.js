@@ -253,8 +253,8 @@ function loadPDFPage(pageNumber) {
     const pdfFrame = document.getElementById('pdf-frame');
     if (!pdfFrame) return;
     
-    // Load PDF with specific page and single page view
-    const pdfUrl = `files/quizz.pdf#page=${pageNumber}&toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&view=FitH&pagemode=none&zoom=100`;
+    // Load PDF with specific page and full screen view
+    const pdfUrl = `files/quizz.pdf#page=${pageNumber}&toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&view=FitH&pagemode=none&zoom=200`;
     pdfFrame.src = pdfUrl;
     
     console.log(`Loading PDF page ${pageNumber}`);
