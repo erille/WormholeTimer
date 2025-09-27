@@ -44,7 +44,13 @@ const SECOND_OVERLAY_MANIFEST = [
     { id: 'A', label: 'A', file: 'img/A.png' },
     { id: 'slowmotion', label: 'Slow Motion', file: 'img/slowmotion.png' },
     { id: 'sport', label: 'Sport', file: 'img/sport.png' },
-    { id: 'sing', label: 'Sing', file: 'img/sing.png' }
+    { id: 'sing', label: 'Sing', file: 'img/sing.png' },
+    { id: 'equilivre', label: 'Equilivre', file: 'img/Equilivre.png' },
+    { id: 'joker', label: 'Joker', file: 'img/Joker.png' },
+    { id: 'kawibawibo', label: 'Kawi Bawi Bo', file: 'img/kawibawibo.png' },
+    { id: 'miaou', label: 'Miaou', file: 'img/Miaou.png' },
+    { id: 'mime', label: 'Mime', file: 'img/Mime.png' },
+    { id: 'dance', label: 'Dance', file: 'img/Dance.png' }
 ];
 
 // Global state
