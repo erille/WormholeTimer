@@ -45,7 +45,7 @@ function initializeLaunchpad() {
     
     // Auto-start the server when page loads
     setTimeout(() => {
-        if (!isServerRunning) {
+        if (!isServerMode) {
             console.log('Auto-starting server...');
             startServer();
         }
