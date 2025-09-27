@@ -47,9 +47,13 @@ function initializeLaunchpad() {
     setTimeout(() => {
         if (!isServerMode) {
             console.log('Auto-starting server...');
-            startServer();
+            startServer().catch(error => {
+                console.error('Failed to auto-start server:', error);
+                updateConnectionStatus('disconnected', `Auto-start failed: ${error.message}`);
+                updateServerToggleButton('disconnected');
+            });
         }
-    }, 1000); // Small delay to ensure everything is loaded
+    }, 2000); // Increased delay to ensure everything is loaded
     
     console.log('Wormhole Launchpad initialized. Server will start automatically!');
 }
@@ -405,10 +409,13 @@ async function startServer() {
         webrtcConnection = new WebRTCSocketIOConnection(signalingServerUrl);
         
         // Check if signaling server is available
+        console.log('Checking signaling server status...');
         const serverAvailable = await webrtcConnection.checkServerStatus();
         if (!serverAvailable) {
-            throw new Error('Signaling server not available. Please start the signaling server first.');
+            console.error('Signaling server not available at http://192.168.1.153:3000');
+            throw new Error('Signaling server not available. Please run: node signaling-server.js');
         }
+        console.log('Signaling server is available, proceeding with connection...');
         
         // Set up message handler
         webrtcConnection.onMessage = (message) => {
