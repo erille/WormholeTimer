@@ -241,45 +241,20 @@ function hidePDFOverlay() {
 }
 
 function setupPDFControls() {
-    const prevBtn = document.getElementById('pdf-prev');
-    const nextBtn = document.getElementById('pdf-next');
     const pageInfo = document.getElementById('pdf-page-info');
     
-    if (!prevBtn || !nextBtn || !pageInfo) return;
+    if (!pageInfo) return;
     
     // Update page info
     updatePDFPageInfo();
-    
-    // Set up event listeners
-    prevBtn.addEventListener('click', () => {
-        if (currentPDFPage > 1) {
-            currentPDFPage--;
-            loadPDFPage(currentPDFPage);
-            updatePDFPageInfo();
-        }
-    });
-    
-    nextBtn.addEventListener('click', () => {
-        if (currentPDFPage < totalPDFPages) {
-            currentPDFPage++;
-            loadPDFPage(currentPDFPage);
-            updatePDFPageInfo();
-        } else {
-            // Close overlay after last page
-            hidePDFOverlay();
-        }
-    });
-    
-    // Update button states
-    updatePDFButtonStates();
 }
 
 function loadPDFPage(pageNumber) {
     const pdfFrame = document.getElementById('pdf-frame');
     if (!pdfFrame) return;
     
-    // Load PDF with specific page
-    const pdfUrl = `files/quizz.pdf#page=${pageNumber}&toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0`;
+    // Load PDF with specific page and single page view
+    const pdfUrl = `files/quizz.pdf#page=${pageNumber}&toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&view=FitH&pagemode=none&zoom=100`;
     pdfFrame.src = pdfUrl;
     
     console.log(`Loading PDF page ${pageNumber}`);
@@ -293,16 +268,8 @@ function updatePDFPageInfo() {
 }
 
 function updatePDFButtonStates() {
-    const prevBtn = document.getElementById('pdf-prev');
-    const nextBtn = document.getElementById('pdf-next');
-    
-    if (prevBtn) {
-        prevBtn.disabled = currentPDFPage <= 1;
-    }
-    
-    if (nextBtn) {
-        nextBtn.disabled = currentPDFPage >= totalPDFPages;
-    }
+    // Button states are now managed on the remote control
+    // This function is kept for compatibility but does nothing
 }
 
 // Function to detect PDF page count (simplified approach)
@@ -311,6 +278,36 @@ function detectPDFPageCount() {
     // In a real implementation, you might use PDF.js to get the actual page count
     totalPDFPages = 10; // Default, can be adjusted based on your PDF
     console.log(`PDF page count set to: ${totalPDFPages}`);
+}
+
+// Handle PDF actions from remote control
+function handlePDFAction(action) {
+    const overlay = document.getElementById('pdf-overlay');
+    if (!overlay || overlay.style.display === 'none') {
+        console.log('PDF overlay not visible, ignoring action');
+        return;
+    }
+    
+    if (action === 'prev') {
+        if (currentPDFPage > 1) {
+            currentPDFPage--;
+            loadPDFPage(currentPDFPage);
+            updatePDFPageInfo();
+            updatePDFButtonStates();
+        }
+    } else if (action === 'next') {
+        if (currentPDFPage < totalPDFPages) {
+            currentPDFPage++;
+            loadPDFPage(currentPDFPage);
+            updatePDFPageInfo();
+            updatePDFButtonStates();
+        } else {
+            // Close overlay after last page
+            hidePDFOverlay();
+        }
+    }
+    
+    console.log(`PDF action: ${action}, current page: ${currentPDFPage}`);
 }
 
 function triggerTimerOverlay(timerType, buttonElement) {
@@ -579,6 +576,8 @@ async function startServer() {
                 if (button) {
                     triggerTimerOverlay(message.overlay, button);
                 }
+            } else if (message.type === 'remote-command' && message.command === 'pdf-action') {
+                handlePDFAction(message.action);
             }
         };
         

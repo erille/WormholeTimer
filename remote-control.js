@@ -25,11 +25,14 @@ function setupRemoteControlEventListeners() {
             if (isConnected) {
                 const overlayType = this.dataset.overlay;
                 const timerType = this.dataset.timer;
+                const pdfAction = this.dataset.pdfAction;
                 
                 if (overlayType) {
                     sendRemoteCommand(overlayType, this);
                 } else if (timerType) {
                     sendTimerCommand(timerType, this);
+                } else if (pdfAction) {
+                    sendPDFCommand(pdfAction, this);
                 }
             } else {
                 alert('Please connect to the launchpad first!');
@@ -182,6 +185,29 @@ function sendTimerCommand(timerType, buttonElement) {
     } else {
         console.error('Failed to send timer command');
         alert('Failed to send timer command to launchpad!');
+    }
+}
+
+function sendPDFCommand(pdfAction, buttonElement) {
+    if (!webrtcConnection || !isConnected) {
+        alert('Not connected to launchpad!');
+        return;
+    }
+    
+    // Add visual feedback
+    buttonElement.classList.add('active');
+    setTimeout(() => {
+        buttonElement.classList.remove('active');
+    }, 600);
+    
+    // Send PDF command to launchpad via Socket.IO
+    const success = webrtcConnection.sendRemoteCommand('pdf-action', pdfAction);
+    
+    if (success) {
+        console.log(`Sent PDF command: ${pdfAction}`);
+    } else {
+        console.error('Failed to send PDF command');
+        alert('Failed to send PDF command to launchpad!');
     }
 }
 
