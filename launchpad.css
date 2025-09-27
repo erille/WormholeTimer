@@ -27,20 +27,20 @@ body {
 }
 
 .flyer-image {
-    max-width: 500px;
-    max-height: 400px;
+    max-width: 1000px;
+    max-height: 800px;
     width: auto;
     height: auto;
     object-fit: contain;
-    border-radius: 15px;
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.4);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: block;
 }
 
 .flyer-image:hover {
     transform: scale(1.02);
-    box-shadow: 0 0 40px rgba(0, 255, 255, 0.5);
+    box-shadow: 0 0 60px rgba(0, 255, 255, 0.6);
 }
 
 /* Section Toggle Buttons */
