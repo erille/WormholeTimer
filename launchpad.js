@@ -62,8 +62,7 @@ function setupLaunchpadEventListeners() {
     });
     
     // WebRTC connection events
-    document.getElementById('start-server-btn').addEventListener('click', startServer);
-    document.getElementById('stop-connection-btn').addEventListener('click', stopConnection);
+    document.getElementById('server-toggle').addEventListener('click', toggleServer);
 }
 
 function triggerLaunchpadOverlay(overlayType, buttonElement) {
@@ -237,6 +236,14 @@ function playSoundFallback(filePath) {
 }
 
 // WebRTC Connection Functions
+function toggleServer() {
+    if (isServerMode) {
+        stopConnection();
+    } else {
+        startServer();
+    }
+}
+
 async function startServer() {
     try {
         isServerMode = true;
@@ -269,9 +276,11 @@ async function startServer() {
             if (state === 'connected') {
                 updateConnectionStatus('connected', 'Connected to remote device');
                 showConnectionInfo();
+                updateServerToggleButton('connected');
             } else if (state === 'disconnected') {
                 updateConnectionStatus('disconnected', 'Disconnected');
                 hideConnectionInfo();
+                updateServerToggleButton('disconnected');
             }
         };
         
@@ -283,27 +292,27 @@ async function startServer() {
         webrtcConnection.onSocketDisconnected = (reason) => {
             updateConnectionStatus('disconnected', `Socket disconnected: ${reason}`);
             hideConnectionInfo();
+            updateServerToggleButton('disconnected');
         };
         
         // Set up data channel handler
         webrtcConnection.onDataChannelOpen = () => {
             updateConnectionStatus('connected', 'Remote control ready');
             showConnectionInfo();
+            updateServerToggleButton('connected');
         };
         
         await webrtcConnection.initialize(true); // true = initiator (server)
         await webrtcConnection.startConnection();
         
         // Update UI
-        document.getElementById('start-server-btn').disabled = true;
-        document.getElementById('stop-connection-btn').disabled = false;
+        updateServerToggleButton('connecting');
         
     } catch (error) {
         console.error('Error starting server:', error);
         updateConnectionStatus('disconnected', `Error: ${error.message}`);
         isServerMode = false;
-        document.getElementById('start-server-btn').disabled = false;
-        document.getElementById('stop-connection-btn').disabled = true;
+        updateServerToggleButton('disconnected');
     }
 }
 
@@ -318,22 +327,47 @@ function stopConnection() {
     hideConnectionInfo();
     
     // Update UI
-    document.getElementById('start-server-btn').disabled = false;
-    document.getElementById('stop-connection-btn').disabled = true;
+    updateServerToggleButton('disconnected');
 }
 
 function updateConnectionStatus(status, text) {
     const indicator = document.getElementById('status-indicator');
     const statusText = document.getElementById('status-text');
-    
+
     indicator.className = 'status-indicator';
     if (status === 'connected') {
         indicator.classList.add('connected');
     } else if (status === 'connecting') {
         indicator.classList.add('connecting');
     }
-    
+
     statusText.textContent = text;
+}
+
+function updateServerToggleButton(status) {
+    const toggleBtn = document.getElementById('server-toggle');
+    const toggleText = toggleBtn.querySelector('.toggle-text');
+    const toggleIndicator = toggleBtn.querySelector('.toggle-indicator');
+    
+    toggleBtn.className = 'connection-toggle-btn';
+    
+    switch (status) {
+        case 'connected':
+            toggleBtn.classList.add('connected');
+            toggleText.textContent = 'Stop Server';
+            toggleIndicator.textContent = '●';
+            break;
+        case 'connecting':
+            toggleBtn.classList.add('connecting');
+            toggleText.textContent = 'Starting...';
+            toggleIndicator.textContent = '●';
+            break;
+        case 'disconnected':
+        default:
+            toggleText.textContent = 'Start Server';
+            toggleIndicator.textContent = '●';
+            break;
+    }
 }
 
 function showConnectionInfo() {
