@@ -37,6 +37,16 @@ const OVERLAY_MANIFEST = [
     { id: 'wormhole', label: 'Wormhole Travel' }
 ];
 
+// Second overlay manifest - Add/remove image overlays by modifying this array
+const SECOND_OVERLAY_MANIFEST = [
+    { id: 'none', label: 'None' },
+    { id: '123soleil', label: '123 Soleil', file: 'img/123soleil.png' },
+    { id: 'A', label: 'A', file: 'img/A.png' },
+    { id: 'slowmotion', label: 'Slow Motion', file: 'img/slowmotion.png' },
+    { id: 'sport', label: 'Sport', file: 'img/sport.png' },
+    { id: 'sing', label: 'Sing', file: 'img/sing.png' }
+];
+
 // Global state
 let timers = [];
 let isMonitoring = false;
@@ -80,7 +90,8 @@ function addTimer() {
         startTime: '00:00:00', // Default time instead of empty
         sound: 'portal', // Default to Portal sound
         theme: THEME_MANIFEST[1].id, // Start with first psychedelic theme
-        overlay: 'wormhole' // Start with Wormhole Travel overlay
+        overlay: 'wormhole', // Start with Wormhole Travel overlay
+        secondOverlay: 'none' // Default to no second overlay
     };
     
     timers.push(timer);
@@ -147,6 +158,14 @@ function createTimerRow(timer, index) {
             </select>
         </div>
         <div>
+            <label>2nd Overlay</label>
+            <select data-timer-id="${timer.id}" data-type="secondOverlay">
+                ${SECOND_OVERLAY_MANIFEST.map(overlay => 
+                    `<option value="${overlay.id}" ${overlay.id === timer.secondOverlay ? 'selected' : ''}>${overlay.label}</option>`
+                ).join('')}
+            </select>
+        </div>
+        <div>
             <label>Actions</label>
             <div class="timer-actions">
                 <button class="test-btn" data-timer-id="${timer.id}" title="Test Sound"></button>
@@ -183,7 +202,7 @@ function setupEventListeners() {
         const timerId = parseFloat(e.target.dataset.timerId);
         const type = e.target.dataset.type;
         
-        if (type === 'sound' || type === 'theme' || type === 'overlay') {
+        if (type === 'sound' || type === 'theme' || type === 'overlay' || type === 'secondOverlay') {
             updateTimer(timerId, type, e.target.value);
         }
     });
@@ -509,6 +528,48 @@ function hideTimerOverlay(overlayType = 'colorful') {
     }, 300); // Match CSS transition duration
 }
 
+function showSecondOverlay(overlayType = 'none') {
+    if (overlayType === 'none') return;
+    
+    const overlayId = `second-overlay-${overlayType}`;
+    const overlay = document.getElementById(overlayId);
+    if (!overlay) {
+        console.error(`Second overlay not found: ${overlayId}`);
+        return;
+    }
+    
+    // Show overlay
+    overlay.style.display = 'flex';
+    
+    // Force reflow to ensure display change is applied
+    overlay.offsetHeight;
+    
+    // Add show class for opacity transition
+    overlay.classList.add('show');
+    
+    // Hide overlay after 30 seconds
+    setTimeout(() => {
+        hideSecondOverlay(overlayType);
+    }, 30000);
+}
+
+function hideSecondOverlay(overlayType = 'none') {
+    if (overlayType === 'none') return;
+    
+    const overlayId = `second-overlay-${overlayType}`;
+    const overlay = document.getElementById(overlayId);
+    
+    if (!overlay) return;
+    
+    // Remove show class for opacity transition
+    overlay.classList.remove('show');
+    
+    // Hide overlay after transition
+    setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 300); // Match CSS transition duration
+}
+
 function testTimerTrigger() {
     // Test with the first timer if it exists
     if (timers.length > 0) {
@@ -575,15 +636,24 @@ function testSound(timerId) {
         // Apply theme for testing
         applyTheme(timer.theme);
         
-        // Show 4D swirl overlay for testing with selected type
+        // Show first overlay for testing with selected type
         const overlayType = timer.overlay || 'colorful';
         showTimerOverlay(overlayType);
+        
+        // Schedule second overlay to show after first overlay ends (9 seconds)
+        const secondOverlayType = timer.secondOverlay || 'none';
+        if (secondOverlayType !== 'none') {
+            setTimeout(() => {
+                showSecondOverlay(secondOverlayType);
+            }, 9000); // Show second overlay after first overlay duration
+        }
         
         const soundLabel = SOUND_MANIFEST.find(s => s.id === timer.sound)?.label || timer.sound;
         const themeLabel = THEME_MANIFEST.find(t => t.id === timer.theme)?.label || timer.theme;
         const overlayLabel = OVERLAY_MANIFEST.find(o => o.id === overlayType)?.label || overlayType;
+        const secondOverlayLabel = SECOND_OVERLAY_MANIFEST.find(o => o.id === secondOverlayType)?.label || secondOverlayType;
         
-        logStatus(`🧪 Testing: Sound: ${soundLabel}, Theme: ${themeLabel}, Overlay: ${overlayLabel}`, 'test');
+        logStatus(`🧪 Testing: Sound: ${soundLabel}, Theme: ${themeLabel}, Overlay: ${overlayLabel}, 2nd Overlay: ${secondOverlayLabel}`, 'test');
     }
 }
 
@@ -647,17 +717,26 @@ function triggerTimer(timer, index) {
     // Apply theme
     applyTheme(timer.theme);
     
-    // Show 4D swirl overlay with selected type
+    // Show first overlay with selected type
     const overlayType = timer.overlay || 'colorful';
     console.log(`Triggering timer ${index + 1} with overlay:`, overlayType, 'Timer state:', timer);
     showTimerOverlay(overlayType);
+    
+    // Schedule second overlay to show after first overlay ends (9 seconds)
+    const secondOverlayType = timer.secondOverlay || 'none';
+    if (secondOverlayType !== 'none') {
+        setTimeout(() => {
+            showSecondOverlay(secondOverlayType);
+        }, 9000); // Show second overlay after first overlay duration
+    }
     
     // Log the event
     const soundLabel = SOUND_MANIFEST.find(s => s.id === timer.sound)?.label || timer.sound;
     const themeLabel = THEME_MANIFEST.find(t => t.id === timer.theme)?.label || timer.theme;
     const overlayLabel = OVERLAY_MANIFEST.find(o => o.id === overlayType)?.label || overlayType;
+    const secondOverlayLabel = SECOND_OVERLAY_MANIFEST.find(o => o.id === secondOverlayType)?.label || secondOverlayType;
     
-    logStatus(`🎵 Timer ${index + 1} TRIGGERED! Sound: ${soundLabel}, Theme: ${themeLabel}, Overlay: ${overlayLabel}`, 'trigger');
+    logStatus(`🎵 Timer ${index + 1} TRIGGERED! Sound: ${soundLabel}, Theme: ${themeLabel}, Overlay: ${overlayLabel}, 2nd Overlay: ${secondOverlayLabel}`, 'trigger');
     
     // Reset timer to prevent multiple triggers
     timer.startTime = '';
