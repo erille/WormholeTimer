@@ -53,8 +53,8 @@ async function connectToLaunchpad() {
     try {
         updateConnectionStatus('connecting', 'Connecting to launchpad...');
         
-        // Get signaling server URL from input
-        const signalingServerUrl = document.getElementById('signaling-server-url').value;
+        // Use fixed signaling server URL
+        const signalingServerUrl = 'http://192.168.1.153:3000';
         
         webrtcConnection = new WebRTCSocketIOConnection(signalingServerUrl);
         

@@ -6,6 +6,7 @@
 - Accès root ou sudo
 - Node.js 18+ (sera installé automatiquement)
 - Nginx (sera configuré automatiquement)
+- IP fixe : 192.168.1.153 (configurée par défaut)
 
 ## 🔧 Installation automatique
 
@@ -117,14 +118,12 @@ sudo systemctl status wormhole-signaling
 ## 🌐 Configuration des URLs
 
 ### Sur l'ordinateur (Launchpad) :
-1. Ouvrez `http://votre-serveur/launchpad`
-2. URL du serveur : `http://votre-serveur:3000` (ou juste `http://votre-serveur` si nginx proxy)
-3. Cliquez "Start Server"
+1. Ouvrez `http://192.168.1.153/launchpad`
+2. Cliquez "Start Server" (URL du serveur configurée automatiquement)
 
 ### Sur le téléphone (Remote Control) :
-1. Ouvrez `http://votre-serveur/remote-control`
-2. URL du serveur : `http://votre-serveur:3000` (ou juste `http://votre-serveur` si nginx proxy)
-3. Cliquez "Connect to Launchpad"
+1. Ouvrez `http://192.168.1.153/remote-control`
+2. Cliquez "Connect to Launchpad" (URL du serveur configurée automatiquement)
 
 ## 🔧 Gestion du service
 
@@ -209,7 +208,7 @@ sudo journalctl -u wormhole-signaling -f
 
 ## 🎯 URLs finales
 
-- **Timer principal** : `http://votre-serveur/`
-- **Launchpad** : `http://votre-serveur/launchpad`
-- **Contrôle distant** : `http://votre-serveur/remote-control`
-- **API Status** : `http://votre-serveur/api/status`
+- **Timer principal** : `http://192.168.1.153/`
+- **Launchpad** : `http://192.168.1.153/launchpad`
+- **Contrôle distant** : `http://192.168.1.153/remote-control`
+- **API Status** : `http://192.168.1.153/api/status`
