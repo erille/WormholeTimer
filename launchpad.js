@@ -43,7 +43,15 @@ function initializeLaunchpad() {
     // Set up event listeners
     setupLaunchpadEventListeners();
     
-    console.log('Wormhole Launchpad initialized. Ready to trigger overlays!');
+    // Auto-start the server when page loads
+    setTimeout(() => {
+        if (!isServerRunning) {
+            console.log('Auto-starting server...');
+            startServer();
+        }
+    }, 1000); // Small delay to ensure everything is loaded
+    
+    console.log('Wormhole Launchpad initialized. Server will start automatically!');
 }
 
 function setupLaunchpadEventListeners() {
@@ -501,17 +509,17 @@ function updateServerToggleButton(status) {
     switch (status) {
         case 'connected':
             toggleBtn.classList.add('connected');
-            toggleText.textContent = 'Stop Server';
+            toggleText.textContent = 'Server: ON';
             toggleIndicator.textContent = '●';
             break;
         case 'connecting':
             toggleBtn.classList.add('connecting');
-            toggleText.textContent = 'Starting...';
+            toggleText.textContent = 'Server: Starting...';
             toggleIndicator.textContent = '●';
             break;
         case 'disconnected':
         default:
-            toggleText.textContent = 'Start Server';
+            toggleText.textContent = 'Server: OFF';
             toggleIndicator.textContent = '●';
             break;
     }
