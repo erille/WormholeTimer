@@ -33,7 +33,8 @@ const THEME_MANIFEST = [
 const OVERLAY_MANIFEST = [
     { id: 'colorful', label: 'Colorful Swirl' },
     { id: 'monochrome', label: 'Monochrome Swirl' },
-    { id: 'nyancat', label: 'Nyan Cat' }
+    { id: 'nyancat', label: 'Nyan Cat' },
+    { id: 'wormhole', label: 'Wormhole Travel' }
 ];
 
 // Global state
@@ -77,9 +78,9 @@ function addTimer() {
     const timer = {
         id: timerId,
         startTime: '00:00:00', // Default time instead of empty
-        sound: SOUND_MANIFEST[0].id,
+        sound: 'portal', // Default to Portal sound
         theme: THEME_MANIFEST[1].id, // Start with first psychedelic theme
-        overlay: OVERLAY_MANIFEST[0].id // Start with colorful overlay
+        overlay: 'wormhole' // Start with Wormhole Travel overlay
     };
     
     timers.push(timer);
@@ -454,6 +455,16 @@ function showTimerOverlay(overlayType = 'colorful') {
             nyancat.offsetHeight; // Force reflow
             nyancat.style.animation = 'nyancatRun 8s linear infinite';
         }
+    } else if (overlayType === 'wormhole') {
+        // For wormhole video, start the video
+        const video = overlay.querySelector('.wormhole-video');
+        if (video) {
+            video.currentTime = 0; // Reset to beginning
+            video.play().catch(e => {
+                console.warn('Could not autoplay video:', e);
+                logStatus('⚠️ Could not autoplay wormhole video', 'error');
+            });
+        }
     } else {
         // For swirl overlays, start the 4D swirl animation
         const swirl = overlay.querySelector('.swirl-4d');
@@ -462,10 +473,10 @@ function showTimerOverlay(overlayType = 'colorful') {
         }
     }
     
-    // Hide overlay after sound duration or 15 seconds default
+    // Hide overlay after sound duration or 9 seconds default
     setTimeout(() => {
         hideTimerOverlay(overlayType);
-    }, 15000); // 15 seconds default
+    }, 9000); // 9 seconds default
 }
 
 function hideTimerOverlay(overlayType = 'colorful') {
@@ -473,18 +484,23 @@ function hideTimerOverlay(overlayType = 'colorful') {
     const overlay = document.getElementById(overlayId);
     const swirl = overlay ? overlay.querySelector('.swirl-4d') : null;
     const nyancat = overlay ? overlay.querySelector('.nyancat') : null;
+    const video = overlay ? overlay.querySelector('.wormhole-video') : null;
     
     if (!overlay) return;
     
     // Remove show class for opacity transition
     overlay.classList.remove('show');
     
-    // Stop animations
+    // Stop animations and video
     if (swirl) {
         swirl.style.animation = 'none';
     }
     if (nyancat) {
         nyancat.style.animation = 'none';
+    }
+    if (video) {
+        video.pause();
+        video.currentTime = 0;
     }
     
     // Hide overlay after transition

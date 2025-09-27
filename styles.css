@@ -1546,3 +1546,39 @@ body.theme-twilight-zone h1 {
         top: 15px;
     }
 }
+
+/* Wormhole Video Overlay Styles */
+.video-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.wormhole-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: videoGlow 3s ease-in-out infinite;
+}
+
+@keyframes videoGlow {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+/* Responsive Video Overlay */
+@media (max-width: 768px) {
+    .wormhole-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
