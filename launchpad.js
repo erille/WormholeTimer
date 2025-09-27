@@ -245,7 +245,7 @@ async function startServer() {
         // Get signaling server URL from input
         const signalingServerUrl = document.getElementById('signaling-server-url').value;
         
-        webrtcConnection = new WebRTCHTTPConnection(signalingServerUrl);
+        webrtcConnection = new WebRTCSocketIOConnection(signalingServerUrl);
         
         // Check if signaling server is available
         const serverAvailable = await webrtcConnection.checkServerStatus();
@@ -256,7 +256,7 @@ async function startServer() {
         // Set up message handler
         webrtcConnection.onMessage = (message) => {
             console.log('Received remote command:', message);
-            if (message.type === 'trigger-overlay') {
+            if (message.type === 'remote-command' && message.command === 'trigger-overlay') {
                 const button = document.querySelector(`[data-overlay="${message.overlay}"]`);
                 if (button) {
                     triggerLaunchpadOverlay(message.overlay, button);
@@ -273,6 +273,16 @@ async function startServer() {
                 updateConnectionStatus('disconnected', 'Disconnected');
                 hideConnectionInfo();
             }
+        };
+        
+        // Set up socket connection handler
+        webrtcConnection.onSocketConnected = () => {
+            updateConnectionStatus('connecting', 'Socket connected, establishing WebRTC...');
+        };
+        
+        webrtcConnection.onSocketDisconnected = (reason) => {
+            updateConnectionStatus('disconnected', `Socket disconnected: ${reason}`);
+            hideConnectionInfo();
         };
         
         // Set up data channel handler

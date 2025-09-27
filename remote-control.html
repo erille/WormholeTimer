@@ -18,7 +18,7 @@
             <div class="connection-panel">
                 <div class="server-config">
                     <label for="signaling-server-url">Signaling Server URL:</label>
-                    <input type="text" id="signaling-server-url" value="http://localhost:8080" placeholder="http://your-server:8080">
+                    <input type="text" id="signaling-server-url" value="http://localhost:3000" placeholder="http://your-server:3000">
                 </div>
                 <div class="connection-status" id="connection-status">
                     <span class="status-indicator" id="status-indicator">●</span>
@@ -69,7 +69,7 @@
         </main>
     </div>
 
-    <script src="webrtc-http.js"></script>
+    <script src="webrtc-socketio.js"></script>
     <script src="remote-control.js"></script>
 </body>
 </html>

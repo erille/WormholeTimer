@@ -56,7 +56,7 @@ async function connectToLaunchpad() {
         // Get signaling server URL from input
         const signalingServerUrl = document.getElementById('signaling-server-url').value;
         
-        webrtcConnection = new WebRTCHTTPConnection(signalingServerUrl);
+        webrtcConnection = new WebRTCSocketIOConnection(signalingServerUrl);
         
         // Check if signaling server is available
         const serverAvailable = await webrtcConnection.checkServerStatus();
@@ -75,6 +75,17 @@ async function connectToLaunchpad() {
                 isConnected = false;
                 updateButtonStates();
             }
+        };
+        
+        // Set up socket connection handler
+        webrtcConnection.onSocketConnected = () => {
+            updateConnectionStatus('connecting', 'Socket connected, establishing WebRTC...');
+        };
+        
+        webrtcConnection.onSocketDisconnected = (reason) => {
+            updateConnectionStatus('disconnected', `Socket disconnected: ${reason}`);
+            isConnected = false;
+            updateButtonStates();
         };
         
         // Set up data channel handler
@@ -128,12 +139,8 @@ function sendRemoteCommand(overlayType, buttonElement) {
         buttonElement.classList.remove('active');
     }, 600);
     
-    // Send command to launchpad
-    const success = webrtcConnection.sendMessage({
-        type: 'trigger-overlay',
-        overlay: overlayType,
-        timestamp: Date.now()
-    });
+    // Send command to launchpad via Socket.IO
+    const success = webrtcConnection.sendRemoteCommand('trigger-overlay', overlayType);
     
     if (success) {
         console.log(`Sent command to trigger overlay: ${overlayType}`);
