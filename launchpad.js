@@ -126,8 +126,8 @@ function triggerLaunchpadOverlay(overlayType, buttonElement) {
         // Show video overlay directly (no sound)
         showVideoOverlay(overlayType);
     } else if (overlayType === 'quiz') {
-        // Show PDF overlay directly (no sound)
-        showPDFOverlay();
+        // Show Quiz overlay directly (no sound)
+        showQuizOverlay();
     } else {
         // Play Portal sound for regular overlays
         playSound('portal');
@@ -192,40 +192,37 @@ function hideVideoOverlay(videoType) {
     }, 300);
 }
 
-// PDF Overlay Functions
-let currentPDFPage = 1;
-let totalPDFPages = 1;
+// Quiz Images Overlay Functions
+let currentQuizPage = 1;
+let totalQuizPages = 13; // We have 13 JPG files
 
-function showPDFOverlay() {
-    const overlay = document.getElementById('pdf-overlay');
-    const pdfFrame = document.getElementById('pdf-frame');
+function showQuizOverlay() {
+    const overlay = document.getElementById('quiz-overlay');
+    const quizImage = document.getElementById('quiz-image');
     
-    if (!overlay || !pdfFrame) {
-        console.error('PDF overlay elements not found');
+    if (!overlay || !quizImage) {
+        console.error('Quiz overlay elements not found');
         return;
     }
     
     // Reset to first page
-    currentPDFPage = 1;
-    
-    // Detect PDF page count
-    detectPDFPageCount();
+    currentQuizPage = 1;
     
     // Show overlay
     overlay.style.display = 'flex';
     overlay.classList.add('show');
     
-    // Load PDF with first page
-    loadPDFPage(1);
+    // Load first quiz image
+    loadQuizImage(1);
     
-    // Set up PDF controls
-    setupPDFControls();
+    // Set up quiz controls
+    setupQuizControls();
     
-    console.log('PDF overlay shown');
+    console.log('Quiz overlay shown');
 }
 
-function hidePDFOverlay() {
-    const overlay = document.getElementById('pdf-overlay');
+function hideQuizOverlay() {
+    const overlay = document.getElementById('quiz-overlay');
     
     if (!overlay) return;
     
@@ -237,89 +234,96 @@ function hidePDFOverlay() {
         overlay.style.display = 'none';
     }, 300);
     
-    console.log('PDF overlay hidden');
+    console.log('Quiz overlay hidden');
 }
 
-function setupPDFControls() {
-    const pageInfo = document.getElementById('pdf-page-info');
+function setupQuizControls() {
+    const pageInfo = document.getElementById('quiz-page-info');
     
     if (!pageInfo) return;
     
     // Update page info
-    updatePDFPageInfo();
+    updateQuizPageInfo();
 }
 
-function loadPDFPage(pageNumber) {
-    const pdfFrame = document.getElementById('pdf-frame');
-    if (!pdfFrame) return;
+function loadQuizImage(pageNumber) {
+    const quizImage = document.getElementById('quiz-image');
+    if (!quizImage) return;
     
-    // Load PDF with specific page and fit to container height
-    const pdfUrl = `files/quizz.pdf#page=${pageNumber}&toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&view=FitV&pagemode=none`;
-    pdfFrame.src = pdfUrl;
+    // Format page number with leading zeros (e.g., 0001, 0002, etc.)
+    const formattedPageNumber = pageNumber.toString().padStart(4, '0');
+    const imageUrl = `files/quizz_page-${formattedPageNumber}.jpg`;
     
-    console.log(`Loading PDF page ${pageNumber}`);
+    // Add loading effect
+    quizImage.style.opacity = '0.5';
+    
+    // Load the image
+    quizImage.src = imageUrl;
+    
+    // Restore opacity when image loads
+    quizImage.onload = () => {
+        quizImage.style.opacity = '1';
+        console.log(`Loaded quiz image: ${imageUrl}`);
+    };
+    
+    // Handle image load errors
+    quizImage.onerror = () => {
+        console.error(`Failed to load quiz image: ${imageUrl}`);
+        quizImage.style.opacity = '1';
+    };
 }
 
-function updatePDFPageInfo() {
-    const pageInfo = document.getElementById('pdf-page-info');
+function updateQuizPageInfo() {
+    const pageInfo = document.getElementById('quiz-page-info');
     if (pageInfo) {
-        pageInfo.textContent = `Page ${currentPDFPage} / ${totalPDFPages}`;
+        pageInfo.textContent = `Page ${currentQuizPage} / ${totalQuizPages}`;
     }
 }
 
-function updatePDFButtonStates() {
-    // Button states are now managed on the remote control
-    // This function is kept for compatibility but does nothing
-}
-
-// Function to detect PDF page count (simplified approach)
-function detectPDFPageCount() {
-    // For now, we'll set a reasonable default and let the user navigate
-    // In a real implementation, you might use PDF.js to get the actual page count
-    totalPDFPages = 10; // Default, can be adjusted based on your PDF
-    console.log(`PDF page count set to: ${totalPDFPages}`);
-}
-
-// Handle PDF actions from remote control
-function handlePDFAction(action) {
-    console.log(`handlePDFAction called with action: ${action}`);
+// Handle Quiz actions from remote control
+function handleQuizAction(action) {
+    console.log(`handleQuizAction called with action: ${action}`);
     
-    const overlay = document.getElementById('pdf-overlay');
+    const overlay = document.getElementById('quiz-overlay');
     if (!overlay || overlay.style.display === 'none' || !overlay.classList.contains('show')) {
-        console.log('PDF overlay not visible, ignoring action');
+        console.log('Quiz overlay not visible, ignoring action');
         return;
     }
     
-    console.log(`PDF overlay is visible, processing action: ${action}`);
-    console.log(`Current page: ${currentPDFPage}, Total pages: ${totalPDFPages}`);
+    console.log(`Quiz overlay is visible, processing action: ${action}`);
+    console.log(`Current page: ${currentQuizPage}, Total pages: ${totalQuizPages}`);
     
     if (action === 'prev') {
-        if (currentPDFPage > 1) {
-            currentPDFPage--;
-            loadPDFPage(currentPDFPage);
-            updatePDFPageInfo();
-            updatePDFButtonStates();
-            console.log(`Moved to previous page: ${currentPDFPage}`);
+        if (currentQuizPage > 1) {
+            currentQuizPage--;
+            loadQuizImage(currentQuizPage);
+            updateQuizPageInfo();
+            console.log(`Moved to previous page: ${currentQuizPage}`);
         } else {
             console.log('Already on first page, cannot go previous');
         }
     } else if (action === 'next') {
-        if (currentPDFPage < totalPDFPages) {
-            currentPDFPage++;
-            loadPDFPage(currentPDFPage);
-            updatePDFPageInfo();
-            updatePDFButtonStates();
-            console.log(`Moved to next page: ${currentPDFPage}`);
+        if (currentQuizPage < totalQuizPages) {
+            currentQuizPage++;
+            loadQuizImage(currentQuizPage);
+            updateQuizPageInfo();
+            console.log(`Moved to next page: ${currentQuizPage}`);
         } else {
             // Close overlay after last page
             console.log('On last page, closing overlay');
-            hidePDFOverlay();
+            hideQuizOverlay();
         }
     } else {
-        console.log(`Unknown PDF action: ${action}`);
+        console.log(`Unknown quiz action: ${action}`);
     }
     
-    console.log(`PDF action completed: ${action}, current page: ${currentPDFPage}`);
+    console.log(`Quiz action completed: ${action}, current page: ${currentQuizPage}`);
+}
+
+// Keep handlePDFAction for backward compatibility, but redirect to handleQuizAction
+function handlePDFAction(action) {
+    console.log(`handlePDFAction called, redirecting to handleQuizAction`);
+    handleQuizAction(action);
 }
 
 function triggerTimerOverlay(timerType, buttonElement) {
@@ -740,3 +744,4 @@ window.WormholeLaunchpad = {
     startServer,
     stopConnection
 };
+
