@@ -53,7 +53,16 @@ async function connectToLaunchpad() {
     try {
         updateConnectionStatus('connecting', 'Connecting to launchpad...');
         
-        webrtcConnection = new WebRTCConnection();
+        // Get signaling server URL from input
+        const signalingServerUrl = document.getElementById('signaling-server-url').value;
+        
+        webrtcConnection = new WebRTCHTTPConnection(signalingServerUrl);
+        
+        // Check if signaling server is available
+        const serverAvailable = await webrtcConnection.checkServerStatus();
+        if (!serverAvailable) {
+            throw new Error('Signaling server not available. Please check the URL and ensure the server is running.');
+        }
         
         // Set up connection state handler
         webrtcConnection.onConnectionStateChange = (state) => {
@@ -84,9 +93,11 @@ async function connectToLaunchpad() {
         
     } catch (error) {
         console.error('Error connecting to launchpad:', error);
-        updateConnectionStatus('disconnected', 'Error connecting to launchpad');
+        updateConnectionStatus('disconnected', `Error: ${error.message}`);
         isConnected = false;
         updateButtonStates();
+        document.getElementById('connect-btn').disabled = false;
+        document.getElementById('disconnect-btn').disabled = true;
     }
 }
 

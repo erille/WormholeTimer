@@ -240,9 +240,18 @@ function playSoundFallback(filePath) {
 async function startServer() {
     try {
         isServerMode = true;
-        updateConnectionStatus('connecting', 'Starting server...');
+        updateConnectionStatus('connecting', 'Connecting to signaling server...');
         
-        webrtcConnection = new WebRTCConnection();
+        // Get signaling server URL from input
+        const signalingServerUrl = document.getElementById('signaling-server-url').value;
+        
+        webrtcConnection = new WebRTCHTTPConnection(signalingServerUrl);
+        
+        // Check if signaling server is available
+        const serverAvailable = await webrtcConnection.checkServerStatus();
+        if (!serverAvailable) {
+            throw new Error('Signaling server not available. Please start the signaling server first.');
+        }
         
         // Set up message handler
         webrtcConnection.onMessage = (message) => {
@@ -281,7 +290,10 @@ async function startServer() {
         
     } catch (error) {
         console.error('Error starting server:', error);
-        updateConnectionStatus('disconnected', 'Error starting server');
+        updateConnectionStatus('disconnected', `Error: ${error.message}`);
+        isServerMode = false;
+        document.getElementById('start-server-btn').disabled = false;
+        document.getElementById('stop-connection-btn').disabled = true;
     }
 }
 

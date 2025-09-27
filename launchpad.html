@@ -49,6 +49,10 @@
 
             <div class="connection-panel">
                 <h3>Remote Control</h3>
+                <div class="server-config">
+                    <label for="signaling-server-url">Signaling Server URL:</label>
+                    <input type="text" id="signaling-server-url" value="http://localhost:8080" placeholder="http://your-server:8080">
+                </div>
                 <div class="connection-status" id="connection-status">
                     <span class="status-indicator" id="status-indicator">●</span>
                     <span id="status-text">Disconnected</span>
@@ -113,7 +117,7 @@
         </div>
     </div>
 
-    <script src="webrtc-connection.js"></script>
+    <script src="webrtc-http.js"></script>
     <script src="launchpad.js"></script>
 </body>
 </html>
