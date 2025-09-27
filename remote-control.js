@@ -24,7 +24,13 @@ function setupRemoteControlEventListeners() {
         button.addEventListener('click', function() {
             if (isConnected) {
                 const overlayType = this.dataset.overlay;
-                sendRemoteCommand(overlayType, this);
+                const timerType = this.dataset.timer;
+                
+                if (overlayType) {
+                    sendRemoteCommand(overlayType, this);
+                } else if (timerType) {
+                    sendTimerCommand(timerType, this);
+                }
             } else {
                 alert('Please connect to the launchpad first!');
             }
@@ -153,6 +159,29 @@ function sendRemoteCommand(overlayType, buttonElement) {
     } else {
         console.error('Failed to send command');
         alert('Failed to send command to launchpad!');
+    }
+}
+
+function sendTimerCommand(timerType, buttonElement) {
+    if (!webrtcConnection || !isConnected) {
+        alert('Not connected to launchpad!');
+        return;
+    }
+    
+    // Add visual feedback
+    buttonElement.classList.add('active');
+    setTimeout(() => {
+        buttonElement.classList.remove('active');
+    }, 600);
+    
+    // Send timer command to launchpad via Socket.IO
+    const success = webrtcConnection.sendRemoteCommand('trigger-timer', timerType);
+    
+    if (success) {
+        console.log(`Sent command to trigger timer: ${timerType}`);
+    } else {
+        console.error('Failed to send timer command');
+        alert('Failed to send timer command to launchpad!');
     }
 }
 

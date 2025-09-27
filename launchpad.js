@@ -359,6 +359,11 @@ async function startServer() {
                 if (button) {
                     triggerLaunchpadOverlay(message.overlay, button);
                 }
+            } else if (message.type === 'remote-command' && message.command === 'trigger-timer') {
+                const button = document.querySelector(`[data-timer="${message.overlay}"]`);
+                if (button) {
+                    triggerTimerOverlay(message.overlay, button);
+                }
             }
         };
         

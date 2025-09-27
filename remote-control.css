@@ -266,6 +266,39 @@
     min-width: 140px;
 }
 
+/* Timer Button Styles for Remote Control */
+.remote-btn.timer-btn {
+    background: linear-gradient(135deg, #00ffff, #ff00ff) !important;
+    border: 2px solid #00ffff !important;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.5),
+        0 0 40px rgba(255, 0, 255, 0.3) !important;
+}
+
+.remote-btn.timer-btn:hover {
+    background: linear-gradient(135deg, #ff00ff, #00ffff) !important;
+    box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.8),
+        0 0 60px rgba(255, 0, 255, 0.5) !important;
+    transform: translateY(-3px) scale(1.05) !important;
+}
+
+.remote-btn.timer-btn .btn-icon {
+    text-shadow: 0 0 10px currentColor;
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 5px currentColor);
+    }
+    50% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 15px currentColor);
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .remote-control-grid {
