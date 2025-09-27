@@ -96,6 +96,12 @@
                     <div class="btn-icon">⚡</div>
                     <div class="btn-label">30 Seconds</div>
                 </button>
+
+                <!-- Button for Soju Group Video -->
+                <button class="launchpad-btn timer-btn" data-overlay="sojugroup">
+                    <div class="btn-icon">🎬</div>
+                    <div class="btn-label">Soju Group</div>
+                </button>
             </div>
 
             <div class="connection-panel">
@@ -233,6 +239,16 @@
                     </svg>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Soju Group Video Overlay -->
+    <div id="overlay-sojugroup" class="timer-overlay">
+        <div class="video-container">
+            <video id="sojugroup-video" class="overlay-video" autoplay muted>
+                <source src="video/sojugroup.mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture de vidéos.
+            </video>
         </div>
     </div>
 

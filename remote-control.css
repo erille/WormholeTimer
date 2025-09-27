@@ -205,26 +205,37 @@
 
 /* Remote Control Grid - Mobile Layout */
 .remote-control-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
     margin-bottom: 30px;
     padding: 0 10px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.remote-row {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+/* Separator between overlays and timers */
+.remote-separator {
+    grid-column: 1 / -1;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 107, 107, 0.3) 20%, 
+        rgba(255, 107, 107, 0.6) 50%, 
+        rgba(255, 107, 107, 0.3) 80%, 
+        transparent 100%);
+    margin: 15px 0;
+    border-radius: 1px;
 }
 
 .remote-btn {
     background: linear-gradient(135deg, #ff6b6b, #ff8e53);
     border: none;
     border-radius: 15px;
-    padding: 20px 15px;
+    padding: 15px 10px;
     color: white;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -233,9 +244,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 140px;
-    height: 120px;
-    min-width: 140px;
+    min-height: 100px;
 }
 
 .remote-btn:hover {
@@ -250,20 +259,14 @@
 }
 
 .remote-btn .btn-icon {
-    font-size: 2.5rem;
-    margin-bottom: 8px;
+    font-size: 2rem;
+    margin-bottom: 6px;
 }
 
 .remote-btn .btn-label {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     text-align: center;
     line-height: 1.2;
-}
-
-.remote-btn-placeholder {
-    width: 140px;
-    height: 120px;
-    min-width: 140px;
 }
 
 /* Timer Button Styles for Remote Control */

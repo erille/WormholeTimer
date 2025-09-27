@@ -87,15 +87,74 @@ function triggerLaunchpadOverlay(overlayType, buttonElement) {
     // Play Portal sound
     playSound('portal');
     
-    // Show wormhole video overlay (9 seconds)
-    showTimerOverlay('wormhole');
-    
-    // Schedule second overlay to show after first overlay ends (9 seconds)
-    setTimeout(() => {
-        showSecondOverlay(overlayType);
-    }, 9000); // Show second overlay after first overlay duration
+    // Check if it's the sojugroup video overlay
+    if (overlayType === 'sojugroup') {
+        // Show sojugroup video overlay directly
+        showVideoOverlay('sojugroup');
+    } else {
+        // Show wormhole video overlay (9 seconds)
+        showTimerOverlay('wormhole');
+        
+        // Schedule second overlay to show after first overlay ends (9 seconds)
+        setTimeout(() => {
+            showSecondOverlay(overlayType);
+        }, 9000); // Show second overlay after first overlay duration
+    }
     
     console.log(`Launchpad triggered: ${overlayType}`);
+}
+
+function showVideoOverlay(videoType) {
+    const overlayId = `overlay-${videoType}`;
+    const overlay = document.getElementById(overlayId);
+    const video = document.getElementById(`${videoType}-video`);
+    
+    if (!overlay || !video) {
+        console.error(`Video overlay not found: ${overlayId}`);
+        return;
+    }
+    
+    // Show overlay
+    overlay.style.display = 'flex';
+    overlay.classList.add('show');
+    
+    // Reset and play video
+    video.currentTime = 0;
+    video.play().catch(e => {
+        console.error(`Error playing ${videoType} video:`, e);
+    });
+    
+    // Hide overlay when video ends
+    video.addEventListener('ended', () => {
+        hideVideoOverlay(videoType);
+    }, { once: true });
+    
+    // Fallback: hide after 10 seconds if video doesn't end naturally
+    setTimeout(() => {
+        hideVideoOverlay(videoType);
+    }, 10000);
+}
+
+function hideVideoOverlay(videoType) {
+    const overlayId = `overlay-${videoType}`;
+    const overlay = document.getElementById(overlayId);
+    const video = document.getElementById(`${videoType}-video`);
+    
+    if (!overlay) return;
+    
+    // Remove show class for opacity transition
+    overlay.classList.remove('show');
+    
+    // Pause video
+    if (video) {
+        video.pause();
+        video.currentTime = 0;
+    }
+    
+    // Hide overlay after transition
+    setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 300);
 }
 
 function triggerTimerOverlay(timerType, buttonElement) {
