@@ -197,6 +197,11 @@ function setupEventListeners() {
     // Test monitoring button
     document.getElementById('test-monitoring-btn').addEventListener('click', testMonitoring);
     
+    // Launchpad button
+    document.getElementById('launchpad-btn').addEventListener('click', function() {
+        window.location.href = 'launchpad.html';
+    });
+    
     // Timer row event delegation
     document.getElementById('timers-container').addEventListener('change', function(e) {
         const timerId = parseFloat(e.target.dataset.timerId);

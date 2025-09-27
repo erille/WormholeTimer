@@ -335,6 +335,23 @@ main {
     transform: translateY(-2px);
 }
 
+.launchpad-btn {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0;
+}
+
+.launchpad-btn:hover {
+    background: #ff5252;
+    transform: translateY(-2px);
+}
+
 .status-panel {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 15px;
