@@ -282,11 +282,16 @@ function detectPDFPageCount() {
 
 // Handle PDF actions from remote control
 function handlePDFAction(action) {
+    console.log(`handlePDFAction called with action: ${action}`);
+    
     const overlay = document.getElementById('pdf-overlay');
     if (!overlay || overlay.style.display === 'none') {
         console.log('PDF overlay not visible, ignoring action');
         return;
     }
+    
+    console.log(`PDF overlay is visible, processing action: ${action}`);
+    console.log(`Current page: ${currentPDFPage}, Total pages: ${totalPDFPages}`);
     
     if (action === 'prev') {
         if (currentPDFPage > 1) {
@@ -294,6 +299,9 @@ function handlePDFAction(action) {
             loadPDFPage(currentPDFPage);
             updatePDFPageInfo();
             updatePDFButtonStates();
+            console.log(`Moved to previous page: ${currentPDFPage}`);
+        } else {
+            console.log('Already on first page, cannot go previous');
         }
     } else if (action === 'next') {
         if (currentPDFPage < totalPDFPages) {
@@ -301,13 +309,17 @@ function handlePDFAction(action) {
             loadPDFPage(currentPDFPage);
             updatePDFPageInfo();
             updatePDFButtonStates();
+            console.log(`Moved to next page: ${currentPDFPage}`);
         } else {
             // Close overlay after last page
+            console.log('On last page, closing overlay');
             hidePDFOverlay();
         }
+    } else {
+        console.log(`Unknown PDF action: ${action}`);
     }
     
-    console.log(`PDF action: ${action}, current page: ${currentPDFPage}`);
+    console.log(`PDF action completed: ${action}, current page: ${currentPDFPage}`);
 }
 
 function triggerTimerOverlay(timerType, buttonElement) {
@@ -577,6 +589,7 @@ async function startServer() {
                     triggerTimerOverlay(message.overlay, button);
                 }
             } else if (message.type === 'remote-command' && message.command === 'pdf-action') {
+                console.log('Received PDF action command:', message);
                 handlePDFAction(message.action);
             }
         };
