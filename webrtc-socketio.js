@@ -209,15 +209,6 @@ class WebRTCSocketIOConnection {
                             signal: answer,
                             type: 'answer'
                         });
-                    } else {
-                        // Server receives offer from client, create answer
-                        await this.pc.setRemoteDescription(new RTCSessionDescription(data.signal));
-                        const answer = await this.pc.createAnswer();
-                        await this.pc.setLocalDescription(answer);
-                        this.socket.emit('webrtc-signal', {
-                            signal: answer,
-                            type: 'answer'
-                        });
                     }
                     break;
 
@@ -249,12 +240,7 @@ class WebRTCSocketIOConnection {
             });
 
             if (this.isInitiator) {
-                // Server waits for client to connect before creating offer
-                console.log('Server ready, waiting for client to connect...');
-                // Don't create offer immediately, wait for client
-            } else {
-                // Client creates offer when connecting
-                console.log('Client connecting, creating offer...');
+                // Create offer
                 const offer = await this.pc.createOffer();
                 await this.pc.setLocalDescription(offer);
                 this.socket.emit('webrtc-signal', {

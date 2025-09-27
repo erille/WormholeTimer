@@ -43,19 +43,7 @@ function initializeLaunchpad() {
     // Set up event listeners
     setupLaunchpadEventListeners();
     
-    // Auto-start the server when page loads
-    setTimeout(() => {
-        if (!isServerMode) {
-            console.log('Auto-starting server...');
-            startServer().catch(error => {
-                console.error('Failed to auto-start server:', error);
-                updateConnectionStatus('disconnected', `Auto-start failed: ${error.message}`);
-                updateServerToggleButton('disconnected');
-            });
-        }
-    }, 2000); // Increased delay to ensure everything is loaded
-    
-    console.log('Wormhole Launchpad initialized. Server will start automatically!');
+    console.log('Wormhole Launchpad initialized. Ready to trigger overlays!');
 }
 
 function setupLaunchpadEventListeners() {
@@ -464,25 +452,11 @@ async function startServer() {
             updateServerToggleButton('connected');
         };
         
-        console.log('Initializing WebRTC connection as server...');
         await webrtcConnection.initialize(true); // true = initiator (server)
-        
-        console.log('Starting WebRTC connection...');
         await webrtcConnection.startConnection();
         
-        // Wait a bit for the connection to stabilize
-        setTimeout(() => {
-            if (webrtcConnection && webrtcConnection.socket && webrtcConnection.socket.connected) {
-                updateConnectionStatus('connected', 'Server ready for remote connections');
-                updateServerToggleButton('connected');
-                showConnectionInfo();
-                console.log('Server started successfully and ready for connections');
-            } else {
-                console.error('Server connection not stable, retrying...');
-                updateConnectionStatus('connecting', 'Stabilizing connection...');
-                updateServerToggleButton('connecting');
-            }
-        }, 2000);
+        // Update UI
+        updateServerToggleButton('connecting');
         
     } catch (error) {
         console.error('Error starting server:', error);
@@ -530,17 +504,17 @@ function updateServerToggleButton(status) {
     switch (status) {
         case 'connected':
             toggleBtn.classList.add('connected');
-            toggleText.textContent = 'Server: ON';
+            toggleText.textContent = 'Stop Server';
             toggleIndicator.textContent = '●';
             break;
         case 'connecting':
             toggleBtn.classList.add('connecting');
-            toggleText.textContent = 'Server: Starting...';
+            toggleText.textContent = 'Starting...';
             toggleIndicator.textContent = '●';
             break;
         case 'disconnected':
         default:
-            toggleText.textContent = 'Server: OFF';
+            toggleText.textContent = 'Start Server';
             toggleIndicator.textContent = '●';
             break;
     }
