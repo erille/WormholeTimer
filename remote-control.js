@@ -200,14 +200,16 @@ function sendPDFCommand(pdfAction, buttonElement) {
         buttonElement.classList.remove('active');
     }, 600);
     
-    // Send PDF command to launchpad via Socket.IO
-    if (webrtcConnection.socket && webrtcConnection.socket.connected) {
-        webrtcConnection.socket.emit('remote-command', {
-            command: 'pdf-action',
-            action: pdfAction,
-            from: 'remote-control',
-            timestamp: Date.now()
-        });
+    // Send PDF command to launchpad via WebRTC data channel
+    const success = webrtcConnection.sendMessage({
+        type: 'remote-command',
+        command: 'pdf-action',
+        action: pdfAction,
+        from: 'remote-control',
+        timestamp: Date.now()
+    });
+    
+    if (success) {
         console.log(`Sent PDF command: ${pdfAction}`);
     } else {
         console.error('Failed to send PDF command');
