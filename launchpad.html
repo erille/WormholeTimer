@@ -102,6 +102,12 @@
                     <div class="btn-icon">🎬</div>
                     <div class="btn-label">Soju Group</div>
                 </button>
+
+                <!-- Button for Soju Solo Video -->
+                <button class="launchpad-btn timer-btn" data-overlay="sojusolo">
+                    <div class="btn-icon">🎭</div>
+                    <div class="btn-label">Soju Solo</div>
+                </button>
             </div>
 
             <div class="connection-panel">
@@ -247,6 +253,16 @@
         <div class="video-container">
             <video id="sojugroup-video" class="overlay-video" autoplay muted>
                 <source src="video/sojugroup.mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture de vidéos.
+            </video>
+        </div>
+    </div>
+
+    <!-- Soju Solo Video Overlay -->
+    <div id="overlay-sojusolo" class="timer-overlay">
+        <div class="video-container">
+            <video id="sojusolo-video" class="overlay-video" autoplay muted>
+                <source src="video/sojusolo.mp4" type="video/mp4">
                 Votre navigateur ne supporte pas la lecture de vidéos.
             </video>
         </div>

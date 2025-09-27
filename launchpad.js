@@ -84,10 +84,10 @@ function triggerLaunchpadOverlay(overlayType, buttonElement) {
         buttonElement.classList.remove('active');
     }, 600);
     
-    // Check if it's the sojugroup video overlay
-    if (overlayType === 'sojugroup') {
-        // Show sojugroup video overlay directly (no sound)
-        showVideoOverlay('sojugroup');
+    // Check if it's a video overlay (sojugroup or sojusolo)
+    if (overlayType === 'sojugroup' || overlayType === 'sojusolo') {
+        // Show video overlay directly (no sound)
+        showVideoOverlay(overlayType);
     } else {
         // Play Portal sound for regular overlays
         playSound('portal');
