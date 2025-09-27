@@ -125,6 +125,9 @@ function triggerLaunchpadOverlay(overlayType, buttonElement) {
     if (overlayType === 'sojugroup' || overlayType === 'sojusolo') {
         // Show video overlay directly (no sound)
         showVideoOverlay(overlayType);
+    } else if (overlayType === 'quiz') {
+        // Show PDF overlay directly (no sound)
+        showPDFOverlay();
     } else {
         // Play Portal sound for regular overlays
         playSound('portal');
@@ -187,6 +190,127 @@ function hideVideoOverlay(videoType) {
     setTimeout(() => {
         overlay.style.display = 'none';
     }, 300);
+}
+
+// PDF Overlay Functions
+let currentPDFPage = 1;
+let totalPDFPages = 1;
+
+function showPDFOverlay() {
+    const overlay = document.getElementById('pdf-overlay');
+    const pdfFrame = document.getElementById('pdf-frame');
+    
+    if (!overlay || !pdfFrame) {
+        console.error('PDF overlay elements not found');
+        return;
+    }
+    
+    // Reset to first page
+    currentPDFPage = 1;
+    
+    // Detect PDF page count
+    detectPDFPageCount();
+    
+    // Show overlay
+    overlay.style.display = 'flex';
+    overlay.classList.add('show');
+    
+    // Load PDF with first page
+    loadPDFPage(1);
+    
+    // Set up PDF controls
+    setupPDFControls();
+    
+    console.log('PDF overlay shown');
+}
+
+function hidePDFOverlay() {
+    const overlay = document.getElementById('pdf-overlay');
+    
+    if (!overlay) return;
+    
+    // Remove show class for opacity transition
+    overlay.classList.remove('show');
+    
+    // Hide overlay after transition
+    setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 300);
+    
+    console.log('PDF overlay hidden');
+}
+
+function setupPDFControls() {
+    const prevBtn = document.getElementById('pdf-prev');
+    const nextBtn = document.getElementById('pdf-next');
+    const pageInfo = document.getElementById('pdf-page-info');
+    
+    if (!prevBtn || !nextBtn || !pageInfo) return;
+    
+    // Update page info
+    updatePDFPageInfo();
+    
+    // Set up event listeners
+    prevBtn.addEventListener('click', () => {
+        if (currentPDFPage > 1) {
+            currentPDFPage--;
+            loadPDFPage(currentPDFPage);
+            updatePDFPageInfo();
+        }
+    });
+    
+    nextBtn.addEventListener('click', () => {
+        if (currentPDFPage < totalPDFPages) {
+            currentPDFPage++;
+            loadPDFPage(currentPDFPage);
+            updatePDFPageInfo();
+        } else {
+            // Close overlay after last page
+            hidePDFOverlay();
+        }
+    });
+    
+    // Update button states
+    updatePDFButtonStates();
+}
+
+function loadPDFPage(pageNumber) {
+    const pdfFrame = document.getElementById('pdf-frame');
+    if (!pdfFrame) return;
+    
+    // Load PDF with specific page
+    const pdfUrl = `files/quizz.pdf#page=${pageNumber}&toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0`;
+    pdfFrame.src = pdfUrl;
+    
+    console.log(`Loading PDF page ${pageNumber}`);
+}
+
+function updatePDFPageInfo() {
+    const pageInfo = document.getElementById('pdf-page-info');
+    if (pageInfo) {
+        pageInfo.textContent = `Page ${currentPDFPage} / ${totalPDFPages}`;
+    }
+}
+
+function updatePDFButtonStates() {
+    const prevBtn = document.getElementById('pdf-prev');
+    const nextBtn = document.getElementById('pdf-next');
+    
+    if (prevBtn) {
+        prevBtn.disabled = currentPDFPage <= 1;
+    }
+    
+    if (nextBtn) {
+        nextBtn.disabled = currentPDFPage >= totalPDFPages;
+    }
+}
+
+// Function to detect PDF page count (simplified approach)
+function detectPDFPageCount() {
+    // For now, we'll set a reasonable default and let the user navigate
+    // In a real implementation, you might use PDF.js to get the actual page count
+    totalPDFPages = 10; // Default, can be adjusted based on your PDF
+    console.log(`PDF page count set to: ${totalPDFPages}`);
 }
 
 function triggerTimerOverlay(timerType, buttonElement) {

@@ -128,6 +128,12 @@
                     <div class="btn-icon">🎭</div>
                     <div class="btn-label">Soju Solo</div>
                 </button>
+
+                <!-- Button for PDF Quiz -->
+                <button class="launchpad-btn timer-btn" data-overlay="quiz">
+                    <div class="btn-icon">📊</div>
+                    <div class="btn-label">Quiz PDF</div>
+                </button>
                 </div>
             </div>
 
@@ -296,6 +302,20 @@
     <div id="second-overlay-mix" class="second-overlay">
         <div class="image-container">
             <img src="img/mix.png" alt="Mix" class="overlay-image">
+        </div>
+    </div>
+
+    <!-- PDF Overlay -->
+    <div id="pdf-overlay" class="pdf-overlay">
+        <div class="pdf-container">
+            <div class="pdf-controls">
+                <button id="pdf-prev" class="pdf-control-btn">← Précédent</button>
+                <span id="pdf-page-info" class="pdf-page-info">Page 1 / 1</span>
+                <button id="pdf-next" class="pdf-control-btn">Suivant →</button>
+            </div>
+            <div class="pdf-viewer">
+                <iframe id="pdf-frame" src="" type="application/pdf"></iframe>
+            </div>
         </div>
     </div>
 
