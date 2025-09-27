@@ -1,14 +1,15 @@
-# Wormhole Timer 🎵🌈
+# Wormhole Timer 🎵🌈🎬
 
-A psychedelic party sound scheduler built with vanilla HTML, CSS, and JavaScript. Schedule sounds to play at specific times and watch your page transform with vibrant, animated themes!
+A psychedelic party sound scheduler built with vanilla HTML, CSS, and JavaScript. Schedule sounds to play at specific times and watch your page transform with vibrant, animated themes and video overlays!
 
 ## Features
 
 - ⏰ **Multiple Timers**: Create and manage multiple sound timers
 - 🎵 **Sound Effects**: Play .wav files when timers trigger
 - 🌈 **16 Psychedelic Themes**: Including 14 vibrant themes, 1 Twilight Zone theme, and 1 pastel theme
+- 🎬 **Video Overlays**: Full-screen video overlays including Wormhole Travel video
 - 🎮 **Real-time Monitoring**: Background monitoring of system time
-- 🧪 **Test Mode**: Test sounds and themes before scheduling
+- 🧪 **Test Mode**: Test sounds, themes, and overlays before scheduling
 - 📱 **Responsive Design**: Works on desktop and mobile
 
 ## Quick Start
@@ -24,16 +25,16 @@ A psychedelic party sound scheduler built with vanilla HTML, CSS, and JavaScript
 ```
 Timer Wormhole/
 ├── index.html          # Main HTML file
-├── styles.css          # All styles and 16 themes
+├── styles.css          # All styles, 16 themes, and overlay animations
 ├── app.js             # JavaScript functionality
 ├── sounds/            # Sound files folder
 │   ├── README.md      # Instructions for adding sounds
-│   ├── chime.wav      # Sound files (add your own)
-│   ├── gong.wav
-│   ├── pulse.wav
-│   ├── alarm.wav
-│   ├── bell.wav
-│   └── whistle.wav
+│   ├── tardis.wav     # Sound files (add your own)
+│   ├── portal.wav
+│   ├── blip.wav
+│   └── chime.wav
+├── video/             # Video overlay files
+│   └── wormholetravel.mp4  # Wormhole travel video overlay
 └── README.md          # This file
 ```
 
@@ -44,16 +45,18 @@ Timer Wormhole/
 1. **Default Setup**: The app starts with 2 timers
 2. **Add More**: Click "+ Add Timer" to create additional timers
 3. **Configure Each Timer**:
-   - **Start Time**: Set when the timer should trigger (HH:MM format)
-   - **Sound**: Choose from available .wav files
+   - **Start Time**: Set when the timer should trigger (HH:MM:SS format)
+   - **Sound**: Choose from available .wav files (default: Portal)
    - **Theme**: Select which theme to apply when triggered
-4. **Test**: Use the ▶︎ button to test sounds immediately
+   - **Overlay**: Choose visual overlay effect (default: Wormhole Travel)
+4. **Test**: Use the ▶︎ button to test sounds, themes, and overlays immediately
 
 ### Monitoring
 
 - **Start Monitoring**: Click "Start Monitoring" to begin watching for timer triggers
 - **Real-time**: The app checks every second for matching times
 - **Auto-reset**: Timers reset after triggering to prevent multiple fires
+- **Overlay Duration**: All overlays display for 9 seconds
 - **Stop**: Click "Stop Monitoring" to pause the system
 
 ### Themes
@@ -80,6 +83,18 @@ The app includes 16 unique themes:
 - Twilight Zone - Black & white swirling vortex
 - Pastel Minimal - Soft, minimal pastel design
 
+### Overlays
+
+The app includes 4 visual overlay effects:
+
+**Animated Overlays (3):**
+- Colorful Swirl - Psychedelic 4D rotating swirl with vibrant colors
+- Monochrome Swirl - Black & white 4D rotating swirl
+- Nyan Cat - Animated Nyan Cat with rainbow trail
+
+**Video Overlay (1):**
+- Wormhole Travel - Full-screen video overlay with wormhole travel effect
+
 ## Adding Sounds
 
 1. **Get .wav files**: Download or create .wav sound files
@@ -94,10 +109,20 @@ The app includes 16 unique themes:
 3. **Add entry**: `{ id: 'your-theme', label: 'Your Theme' }`
 4. **CSS class**: Use format `body.theme-your-theme { /* your styles */ }`
 
+## Adding Video Overlays
+
+1. **Get video files**: Add .mp4 video files to the `video/` folder
+2. **Update manifest**: Edit the `OVERLAY_MANIFEST` array in `app.js`
+3. **Add entry**: `{ id: 'your-overlay', label: 'Your Overlay' }`
+4. **Create HTML**: Add overlay div in `index.html` with video element
+5. **Add CSS**: Style the video overlay in `styles.css`
+6. **Update JavaScript**: Add overlay handling in `showTimerOverlay()` function
+
 ## Technical Details
 
 - **Pure Vanilla**: No frameworks, libraries, or dependencies
 - **Web Audio API**: Uses modern audio APIs with HTML5 fallback
+- **HTML5 Video**: Full-screen video overlays with autoplay support
 - **Responsive**: Mobile-friendly design with CSS Grid
 - **Cross-browser**: Works in all modern browsers
 - **Local Storage**: No server required - runs entirely in browser
@@ -121,6 +146,12 @@ The app includes 16 unique themes:
 - Verify theme IDs match between manifest and CSS classes
 - Ensure CSS class names follow the format: `body.theme-{id}`
 
+**Overlays not showing?**
+- Check that video files exist in the video/ folder
+- Verify overlay IDs match between manifest and HTML elements
+- Ensure video elements have proper autoplay attributes
+- Check browser autoplay policies (some browsers block autoplay)
+
 **Timers not triggering?**
 - Make sure monitoring is started
 - Check that start times are set correctly
@@ -133,13 +164,13 @@ This project is open source and available under the MIT License.
 ## Contributing
 
 Feel free to:
-- Add new themes
+- Add new themes and overlays
 - Improve the UI/UX
 - Add new features
 - Fix bugs
-- Create better sound effects
+- Create better sound effects and video overlays
 
 ---
 
-**Enjoy your psychedelic party timer! 🎉🌈🎵**
+**Enjoy your psychedelic party timer! 🎉🌈🎵🎬**
 
