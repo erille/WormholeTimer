@@ -201,3 +201,92 @@
     color: rgba(255, 255, 255, 0.8);
     text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
+
+/* Connection Panel Styles */
+.connection-panel {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 25px;
+    margin: 20px auto;
+    max-width: 500px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.connection-panel h3 {
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.connection-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+}
+
+.status-indicator {
+    font-size: 1.5rem;
+    color: #dc3545;
+    transition: color 0.3s ease;
+}
+
+.status-indicator.connected {
+    color: #28a745;
+}
+
+.status-indicator.connecting {
+    color: #ffc107;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+#status-text {
+    font-weight: bold;
+    color: #495057;
+}
+
+.connection-controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.connection-info {
+    text-align: center;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+}
+
+.connection-info p {
+    margin-bottom: 15px;
+    color: #495057;
+}
+
+#qr-code {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+#remote-url {
+    font-family: 'Courier New', monospace;
+    background: #e9ecef;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #495057;
+    word-break: break-all;
+}

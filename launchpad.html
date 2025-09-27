@@ -47,6 +47,23 @@
                 </button>
             </div>
 
+            <div class="connection-panel">
+                <h3>Remote Control</h3>
+                <div class="connection-status" id="connection-status">
+                    <span class="status-indicator" id="status-indicator">●</span>
+                    <span id="status-text">Disconnected</span>
+                </div>
+                <div class="connection-controls">
+                    <button id="start-server-btn" class="control-btn">Start Server</button>
+                    <button id="stop-connection-btn" class="control-btn" disabled>Stop Connection</button>
+                </div>
+                <div class="connection-info" id="connection-info" style="display: none;">
+                    <p>Share this QR code with your phone:</p>
+                    <div id="qr-code"></div>
+                    <p>Or visit: <span id="remote-url"></span></p>
+                </div>
+            </div>
+
             <div class="launchpad-controls">
                 <button id="back-to-timer" class="control-btn">← Back to Timer</button>
                 <button id="test-all-btn" class="control-btn">Test All</button>
@@ -96,6 +113,7 @@
         </div>
     </div>
 
+    <script src="webrtc-connection.js"></script>
     <script src="launchpad.js"></script>
 </body>
 </html>

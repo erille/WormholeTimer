@@ -1,0 +1,240 @@
+/* Remote Control Specific Styles */
+
+.remote-control-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.remote-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 15px;
+    padding: 20px 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+    position: relative;
+    overflow: hidden;
+}
+
+.remote-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.remote-btn:hover::before {
+    left: 100%;
+}
+
+.remote-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.remote-btn:active {
+    transform: translateY(-1px) scale(1.01);
+    box-shadow: 0 6px 15px rgba(102, 126, 234, 0.5);
+}
+
+.remote-btn.active {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+    animation: buttonPulse 0.6s ease-in-out;
+}
+
+.remote-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.remote-btn:disabled:hover {
+    transform: none;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+@keyframes buttonPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.remote-btn .btn-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.remote-btn .btn-label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.remote-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    padding: 20px;
+}
+
+/* Connection Panel Styles (reuse from launchpad) */
+.connection-panel {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.connection-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+}
+
+.status-indicator {
+    font-size: 1.5rem;
+    color: #dc3545;
+    transition: color 0.3s ease;
+}
+
+.status-indicator.connected {
+    color: #28a745;
+}
+
+.status-indicator.connecting {
+    color: #ffc107;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+#status-text {
+    font-weight: bold;
+    color: #495057;
+}
+
+.connection-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .remote-control-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .remote-btn {
+        min-height: 100px;
+        padding: 15px 10px;
+    }
+    
+    .remote-btn .btn-icon {
+        font-size: 2rem;
+        margin-bottom: 8px;
+    }
+    
+    .remote-btn .btn-label {
+        font-size: 0.9rem;
+    }
+    
+    .remote-controls {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .control-btn {
+        width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .remote-control-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    
+    .remote-btn {
+        min-height: 90px;
+        padding: 12px 8px;
+    }
+    
+    .remote-btn .btn-icon {
+        font-size: 1.8rem;
+        margin-bottom: 6px;
+    }
+    
+    .remote-btn .btn-label {
+        font-size: 0.8rem;
+    }
+}
+
+/* Header styles for remote control */
+.remote-header h1 {
+    font-size: 2.5rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    margin-bottom: 10px;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.remote-header p {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wormhole Remote Control</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="remote-control.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎹 Remote Control</h1>
+            <p>Control the Wormhole Launchpad remotely</p>
+        </header>
+
+        <main>
+            <div class="connection-panel">
+                <div class="connection-status" id="connection-status">
+                    <span class="status-indicator" id="status-indicator">●</span>
+                    <span id="status-text">Disconnected</span>
+                </div>
+                <div class="connection-controls">
+                    <button id="connect-btn" class="control-btn">Connect to Launchpad</button>
+                    <button id="disconnect-btn" class="control-btn" disabled>Disconnect</button>
+                </div>
+            </div>
+
+            <div class="remote-control-grid">
+                <!-- Button for 123 Soleil -->
+                <button class="remote-btn" data-overlay="123soleil">
+                    <div class="btn-icon">☀️</div>
+                    <div class="btn-label">123 Soleil</div>
+                </button>
+
+                <!-- Button for A -->
+                <button class="remote-btn" data-overlay="A">
+                    <div class="btn-icon">🅰️</div>
+                    <div class="btn-label">A</div>
+                </button>
+
+                <!-- Button for Slow Motion -->
+                <button class="remote-btn" data-overlay="slowmotion">
+                    <div class="btn-icon">🐌</div>
+                    <div class="btn-label">Slow Motion</div>
+                </button>
+
+                <!-- Button for Sport -->
+                <button class="remote-btn" data-overlay="sport">
+                    <div class="btn-icon">⚽</div>
+                    <div class="btn-label">Sport</div>
+                </button>
+
+                <!-- Button for Sing -->
+                <button class="remote-btn" data-overlay="sing">
+                    <div class="btn-icon">🎤</div>
+                    <div class="btn-label">Sing</div>
+                </button>
+            </div>
+
+            <div class="remote-controls">
+                <button id="back-to-launchpad" class="control-btn">← Back to Launchpad</button>
+                <button id="test-all-remote-btn" class="control-btn">Test All</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="webrtc-connection.js"></script>
+    <script src="remote-control.js"></script>
+</body>
+</html>

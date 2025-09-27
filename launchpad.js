@@ -20,6 +20,8 @@ const SECOND_OVERLAY_MANIFEST = [
 
 // Global state
 let audioContext = null;
+let webrtcConnection = null;
+let isServerMode = false;
 
 // Initialize the launchpad when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -58,6 +60,10 @@ function setupLaunchpadEventListeners() {
     document.getElementById('test-all-btn').addEventListener('click', function() {
         testAllOverlays();
     });
+    
+    // WebRTC connection events
+    document.getElementById('start-server-btn').addEventListener('click', startServer);
+    document.getElementById('stop-connection-btn').addEventListener('click', stopConnection);
 }
 
 function triggerLaunchpadOverlay(overlayType, buttonElement) {
@@ -230,10 +236,128 @@ function playSoundFallback(filePath) {
     });
 }
 
+// WebRTC Connection Functions
+async function startServer() {
+    try {
+        isServerMode = true;
+        updateConnectionStatus('connecting', 'Starting server...');
+        
+        webrtcConnection = new WebRTCConnection();
+        
+        // Set up message handler
+        webrtcConnection.onMessage = (message) => {
+            console.log('Received remote command:', message);
+            if (message.type === 'trigger-overlay') {
+                const button = document.querySelector(`[data-overlay="${message.overlay}"]`);
+                if (button) {
+                    triggerLaunchpadOverlay(message.overlay, button);
+                }
+            }
+        };
+        
+        // Set up connection state handler
+        webrtcConnection.onConnectionStateChange = (state) => {
+            if (state === 'connected') {
+                updateConnectionStatus('connected', 'Connected to remote device');
+                showConnectionInfo();
+            } else if (state === 'disconnected') {
+                updateConnectionStatus('disconnected', 'Disconnected');
+                hideConnectionInfo();
+            }
+        };
+        
+        // Set up data channel handler
+        webrtcConnection.onDataChannelOpen = () => {
+            updateConnectionStatus('connected', 'Remote control ready');
+            showConnectionInfo();
+        };
+        
+        await webrtcConnection.initialize(true); // true = initiator (server)
+        await webrtcConnection.startConnection();
+        
+        // Update UI
+        document.getElementById('start-server-btn').disabled = true;
+        document.getElementById('stop-connection-btn').disabled = false;
+        
+    } catch (error) {
+        console.error('Error starting server:', error);
+        updateConnectionStatus('disconnected', 'Error starting server');
+    }
+}
+
+function stopConnection() {
+    if (webrtcConnection) {
+        webrtcConnection.close();
+        webrtcConnection = null;
+    }
+    
+    isServerMode = false;
+    updateConnectionStatus('disconnected', 'Disconnected');
+    hideConnectionInfo();
+    
+    // Update UI
+    document.getElementById('start-server-btn').disabled = false;
+    document.getElementById('stop-connection-btn').disabled = true;
+}
+
+function updateConnectionStatus(status, text) {
+    const indicator = document.getElementById('status-indicator');
+    const statusText = document.getElementById('status-text');
+    
+    indicator.className = 'status-indicator';
+    if (status === 'connected') {
+        indicator.classList.add('connected');
+    } else if (status === 'connecting') {
+        indicator.classList.add('connecting');
+    }
+    
+    statusText.textContent = text;
+}
+
+function showConnectionInfo() {
+    const connectionInfo = document.getElementById('connection-info');
+    const remoteUrl = document.getElementById('remote-url');
+    
+    // Get current URL and replace with remote control URL
+    const currentUrl = window.location.href;
+    const remoteControlUrl = currentUrl.replace('launchpad.html', 'remote-control.html');
+    
+    remoteUrl.textContent = remoteControlUrl;
+    connectionInfo.style.display = 'block';
+    
+    // Generate QR code (simple text-based for now)
+    generateQRCode(remoteControlUrl);
+}
+
+function hideConnectionInfo() {
+    const connectionInfo = document.getElementById('connection-info');
+    connectionInfo.style.display = 'none';
+}
+
+function generateQRCode(url) {
+    const qrContainer = document.getElementById('qr-code');
+    // Simple QR code generation using a library or API
+    // For now, we'll create a simple visual representation
+    qrContainer.innerHTML = `
+        <div style="background: white; padding: 20px; border: 2px solid #333;">
+            <div style="font-family: monospace; font-size: 12px; line-height: 1;">
+                <div>████ ████ ████ ████</div>
+                <div>█  █ █  █ █  █ █  █</div>
+                <div>████ ████ ████ ████</div>
+                <div>█  █ █  █ █  █ █  █</div>
+                <div>████ ████ ████ ████</div>
+            </div>
+            <p style="margin: 10px 0 0 0; font-size: 10px; color: #666;">QR Code for: ${url}</p>
+        </div>
+    `;
+}
+
 // Export functions for potential external use
 window.WormholeLaunchpad = {
     triggerLaunchpadOverlay,
     playSound,
     showTimerOverlay,
-    showSecondOverlay
+    showSecondOverlay,
+    startServer,
+    stopConnection
 };
