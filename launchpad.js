@@ -916,7 +916,7 @@ function startGameTimer(overlayType) {
     // Set start time
     gameTimerStartTime = Date.now();
     
-    // Start 1-minute timer (1 * 60 * 1000 milliseconds) - for testing
+    // Start 30-minute timer (30 * 60 * 1000 milliseconds)
     gameTimer = setTimeout(() => {
         console.log(`Game timer finished for overlay: ${overlayType}`);
         playSound('alarm');
@@ -933,7 +933,7 @@ function startGameTimer(overlayType) {
                 timestamp: Date.now()
             });
         }
-    }, 1 * 60 * 1000); // 1 minute for testing
+    }, 30 * 60 * 1000); // 30 minutes
     
     console.log(`Game timer started for overlay: ${overlayType}`);
     
@@ -943,7 +943,7 @@ function startGameTimer(overlayType) {
             type: 'game-timer-started',
             overlay: overlayType,
             startTime: gameTimerStartTime,
-            duration: 1 * 60 * 1000, // 1 minute in milliseconds for testing
+            duration: 30 * 60 * 1000, // 30 minutes in milliseconds
             timestamp: Date.now()
         });
     }
@@ -959,7 +959,7 @@ function getGameTimerStatus() {
     }
     
     const elapsed = Date.now() - gameTimerStartTime;
-    const totalTime = 1 * 60 * 1000; // 1 minute for testing
+    const totalTime = 30 * 60 * 1000; // 30 minutes
     const timeLeft = Math.max(0, totalTime - elapsed);
     
     return {
