@@ -4,6 +4,7 @@
 // Global state
 let webrtcConnection = null;
 let isConnected = false;
+let gameTimerUpdateInterval = null;
 
 // Initialize the remote control when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -113,6 +114,15 @@ async function connectToLaunchpad() {
             isConnected = true;
             updateButtonStates();
             updateToggleButton('connected');
+            
+            // Start game timer update interval
+            startGameTimerUpdates();
+        };
+        
+        // Set up message handler for game timer messages
+        webrtcConnection.onMessage = (message) => {
+            console.log('Received message from launchpad:', message);
+            handleGameTimerMessage(message);
         };
         
         await webrtcConnection.initialize(false); // false = not initiator (client)
@@ -135,6 +145,9 @@ function disconnectFromLaunchpad() {
         webrtcConnection.close();
         webrtcConnection = null;
     }
+    
+    // Stop game timer updates
+    stopGameTimerUpdates();
     
     isConnected = false;
     updateConnectionStatus('disconnected', 'Disconnected from launchpad');
@@ -279,10 +292,126 @@ function updateButtonStates() {
     });
 }
 
+// Game Timer Functions
+function startGameTimerUpdates() {
+    // Clear any existing interval
+    if (gameTimerUpdateInterval) {
+        clearInterval(gameTimerUpdateInterval);
+    }
+    
+    // Update timer display every second
+    gameTimerUpdateInterval = setInterval(() => {
+        updateGameTimerDisplay();
+    }, 1000);
+    
+    // Initial update
+    updateGameTimerDisplay();
+}
+
+function stopGameTimerUpdates() {
+    if (gameTimerUpdateInterval) {
+        clearInterval(gameTimerUpdateInterval);
+        gameTimerUpdateInterval = null;
+    }
+    
+    // Reset timer display
+    resetGameTimerDisplay();
+}
+
+function updateGameTimerDisplay() {
+    if (!webrtcConnection || !isConnected) {
+        resetGameTimerDisplay();
+        return;
+    }
+    
+    // Request timer status from launchpad
+    const success = webrtcConnection.sendMessage({
+        type: 'get-game-timer-status',
+        timestamp: Date.now()
+    });
+    
+    if (!success) {
+        console.warn('Failed to request game timer status');
+    }
+}
+
+function resetGameTimerDisplay() {
+    const display = document.getElementById('game-timer-display');
+    const progress = document.getElementById('game-timer-progress');
+    const status = document.getElementById('game-timer-status');
+    
+    if (display) display.textContent = '00:00';
+    if (progress) {
+        const circumference = 2 * Math.PI * 50; // radius = 50
+        progress.style.strokeDashoffset = circumference;
+    }
+    if (status) status.textContent = 'Aucun timer actif';
+}
+
+function updateGameTimerStatus(timerData) {
+    const display = document.getElementById('game-timer-display');
+    const progress = document.getElementById('game-timer-progress');
+    const status = document.getElementById('game-timer-status');
+    
+    if (!display || !progress || !status) return;
+    
+    if (!timerData.active) {
+        resetGameTimerDisplay();
+        return;
+    }
+    
+    // Update time display
+    const timeLeft = Math.max(0, timerData.timeLeft);
+    const minutes = Math.floor(timeLeft / 60000);
+    const seconds = Math.floor((timeLeft % 60000) / 1000);
+    const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    display.textContent = formattedTime;
+    
+    // Update progress ring
+    const totalTime = timerData.totalTime;
+    const progressPercent = (totalTime - timeLeft) / totalTime;
+    const circumference = 2 * Math.PI * 50; // radius = 50
+    const offset = circumference - (progressPercent * circumference);
+    progress.style.strokeDashoffset = offset;
+    
+    // Update status
+    status.textContent = `Timer actif - ${formattedTime} restant`;
+}
+
+// Handle game timer messages from launchpad
+function handleGameTimerMessage(message) {
+    switch (message.type) {
+        case 'game-timer-started':
+            console.log('Game timer started:', message.overlay);
+            updateGameTimerStatus({
+                active: true,
+                timeLeft: message.duration,
+                totalTime: message.duration
+            });
+            break;
+            
+        case 'game-timer-finished':
+            console.log('Game timer finished:', message.overlay);
+            resetGameTimerDisplay();
+            break;
+            
+        case 'game-timer-stopped':
+            console.log('Game timer stopped');
+            resetGameTimerDisplay();
+            break;
+            
+        case 'game-timer-status':
+            updateGameTimerStatus(message.timerData);
+            break;
+    }
+}
+
 // Export functions for potential external use
 window.RemoteControl = {
     connectToLaunchpad,
     disconnectFromLaunchpad,
     sendRemoteCommand,
-    testAllRemoteOverlays
+    testAllRemoteOverlays,
+    updateGameTimerStatus,
+    handleGameTimerMessage
 };

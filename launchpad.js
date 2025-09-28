@@ -5,7 +5,8 @@
 const SOUND_MANIFEST = [
     { id: 'tardis', label: 'Tardis', file: 'sounds/tardis.wav' },
     { id: 'portal', label: 'Portal', file: 'sounds/portal.wav' },
-    { id: 'blip', label: 'Blip', file: 'sounds/blip.wav' }
+    { id: 'blip', label: 'Blip', file: 'sounds/blip.wav' },
+    { id: 'alarm', label: 'Alarm', file: 'sounds/alarm.wav' }
 ];
 
 // Second overlay manifest - Same as main timer
@@ -26,6 +27,8 @@ let activeTimers = {
     '5min': null,
     '30s': null
 };
+let gameTimer = null; // 30 minutes timer for game overlays
+let gameTimerStartTime = null;
 
 // Initialize the launchpad when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -142,6 +145,9 @@ function triggerLaunchpadOverlay(overlayType, buttonElement) {
         setTimeout(() => {
             showSecondOverlay(overlayType);
         }, 9000); // Show second overlay after first overlay duration
+        
+        // Start 30-minute game timer for game overlays
+        startGameTimer(overlayType);
     }
     
     console.log(`Launchpad triggered: ${overlayType}`);
@@ -749,6 +755,14 @@ async function startServer() {
             } else if (message.type === 'remote-command' && message.command === 'pdf-action') {
                 console.log('Received PDF action command:', message);
                 handlePDFAction(message.action);
+            } else if (message.type === 'get-game-timer-status') {
+                // Send current game timer status to remote control
+                const timerStatus = getGameTimerStatus();
+                webrtcConnection.sendMessage({
+                    type: 'game-timer-status',
+                    timerData: timerStatus,
+                    timestamp: Date.now()
+                });
             }
         };
         
@@ -889,6 +903,87 @@ function generateQRCode(url) {
     `;
 }
 
+// Game Timer Functions (30 minutes)
+function startGameTimer(overlayType) {
+    // Clear any existing game timer
+    if (gameTimer) {
+        clearTimeout(gameTimer);
+    }
+    
+    // Set start time
+    gameTimerStartTime = Date.now();
+    
+    // Start 30-minute timer (30 * 60 * 1000 milliseconds)
+    gameTimer = setTimeout(() => {
+        console.log(`Game timer finished for overlay: ${overlayType}`);
+        playSound('alarm');
+        
+        // Reset timer state
+        gameTimer = null;
+        gameTimerStartTime = null;
+        
+        // Notify remote control that timer finished
+        if (webrtcConnection && webrtcConnection.sendMessage) {
+            webrtcConnection.sendMessage({
+                type: 'game-timer-finished',
+                overlay: overlayType,
+                timestamp: Date.now()
+            });
+        }
+    }, 30 * 60 * 1000); // 30 minutes
+    
+    console.log(`Game timer started for overlay: ${overlayType}`);
+    
+    // Notify remote control that timer started
+    if (webrtcConnection && webrtcConnection.sendMessage) {
+        webrtcConnection.sendMessage({
+            type: 'game-timer-started',
+            overlay: overlayType,
+            startTime: gameTimerStartTime,
+            duration: 30 * 60 * 1000, // 30 minutes in milliseconds
+            timestamp: Date.now()
+        });
+    }
+}
+
+function getGameTimerStatus() {
+    if (!gameTimer || !gameTimerStartTime) {
+        return {
+            active: false,
+            timeLeft: 0,
+            totalTime: 0
+        };
+    }
+    
+    const elapsed = Date.now() - gameTimerStartTime;
+    const totalTime = 30 * 60 * 1000; // 30 minutes
+    const timeLeft = Math.max(0, totalTime - elapsed);
+    
+    return {
+        active: true,
+        timeLeft: timeLeft,
+        totalTime: totalTime,
+        elapsed: elapsed
+    };
+}
+
+function stopGameTimer() {
+    if (gameTimer) {
+        clearTimeout(gameTimer);
+        gameTimer = null;
+        gameTimerStartTime = null;
+        console.log('Game timer stopped');
+        
+        // Notify remote control that timer was stopped
+        if (webrtcConnection && webrtcConnection.sendMessage) {
+            webrtcConnection.sendMessage({
+                type: 'game-timer-stopped',
+                timestamp: Date.now()
+            });
+        }
+    }
+}
+
 // Export functions for potential external use
 window.WormholeLaunchpad = {
     triggerLaunchpadOverlay,
@@ -896,6 +991,9 @@ window.WormholeLaunchpad = {
     showTimerOverlay,
     showSecondOverlay,
     startServer,
-    stopConnection
+    stopConnection,
+    startGameTimer,
+    getGameTimerStatus,
+    stopGameTimer
 };
 
