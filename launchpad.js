@@ -116,6 +116,9 @@ function setupLaunchpadEventListeners() {
 }
 
 function triggerLaunchpadOverlay(overlayType, buttonElement) {
+    // Close all active overlays before showing new one
+    closeAllOverlays();
+    
     // Add active class for visual feedback
     buttonElement.classList.add('active');
     
@@ -906,6 +909,43 @@ function generateQRCode(url) {
     `;
 }
 
+// Overlay Management Functions
+function closeAllOverlays() {
+    console.log('Closing all active overlays...');
+    
+    // Close all video overlays
+    const videoOverlays = ['sojugroup', 'sojusolo', 'redlight'];
+    videoOverlays.forEach(videoType => {
+        hideVideoOverlay(videoType);
+    });
+    
+    // Close all second overlays (game overlays)
+    const secondOverlays = ['123soleil', 'A', 'slowmotion', 'sport', 'sing', 'equilivre', 'joker', 'kawibawibo', 'miaou', 'mime', 'dance', 'mix'];
+    secondOverlays.forEach(overlayType => {
+        hideSecondOverlay(overlayType);
+    });
+    
+    // Close all timer overlays
+    const timerOverlays = ['wormhole', '5min', '30s'];
+    timerOverlays.forEach(timerType => {
+        hideTimerOverlay(timerType);
+    });
+    
+    // Close quiz overlays
+    hideQuizQuestionsOverlay();
+    hideQuizReponsesOverlay();
+    
+    // Stop any active timers
+    Object.keys(activeTimers).forEach(timerType => {
+        if (activeTimers[timerType]) {
+            clearInterval(activeTimers[timerType]);
+            activeTimers[timerType] = null;
+        }
+    });
+    
+    console.log('All overlays closed');
+}
+
 // Game Timer Functions (30 minutes)
 function startGameTimer(overlayType) {
     // Clear any existing game timer
@@ -997,6 +1037,7 @@ window.WormholeLaunchpad = {
     stopConnection,
     startGameTimer,
     getGameTimerStatus,
-    stopGameTimer
+    stopGameTimer,
+    closeAllOverlays
 };
 
