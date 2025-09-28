@@ -126,8 +126,8 @@ function triggerLaunchpadOverlay(overlayType, buttonElement) {
     
     // Check if it's a video overlay (sojugroup, sojusolo, or redlight)
     if (overlayType === 'sojugroup' || overlayType === 'sojusolo' || overlayType === 'redlight') {
-        // Close all overlays except wormhole for video overlays
-        closeAllOverlaysExceptWormhole();
+        // Close all overlays for video overlays (no wormhole needed)
+        closeAllOverlays();
         // Show video overlay directly (no sound for soju videos, sound for redlight)
         showVideoOverlay(overlayType);
     } else if (overlayType === 'quiz-questions') {
