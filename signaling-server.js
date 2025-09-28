@@ -246,10 +246,10 @@ app.get('/remote-control', (req, res) => {
     res.sendFile(path.join(__dirname, 'remote-control.html'));
 });
 
-// Cleanup inactive connections every 5 minutes
+// Cleanup inactive connections every 14 hours (very long timeout)
 setInterval(() => {
     const now = Date.now();
-    const inactiveThreshold = 5 * 60 * 1000; // 5 minutes
+    const inactiveThreshold = 14 * 60 * 60 * 1000; // 14 hours
     
     for (const [socketId, connection] of connections.entries()) {
         if (now - connection.lastActivity > inactiveThreshold) {
@@ -260,7 +260,7 @@ setInterval(() => {
             }
         }
     }
-}, 5 * 60 * 1000);
+}, 14 * 60 * 60 * 1000); // Check every 14 hours
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
