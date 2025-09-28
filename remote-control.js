@@ -34,6 +34,8 @@ function setupRemoteControlEventListeners() {
                     sendTimerCommand(timerType, this);
                 } else if (pdfAction) {
                     sendPDFCommand(pdfAction, this);
+                } else if (this.dataset.sound) {
+                    sendSoundCommand(this.dataset.sound, this);
                 }
             } else {
                 alert('Please connect to the launchpad first!');
@@ -230,6 +232,35 @@ function sendPDFCommand(pdfAction, buttonElement) {
     }
 }
 
+function sendSoundCommand(soundId, buttonElement) {
+    if (!webrtcConnection || !isConnected) {
+        alert('Not connected to launchpad!');
+        return;
+    }
+    
+    // Add visual feedback
+    buttonElement.classList.add('active');
+    setTimeout(() => {
+        buttonElement.classList.remove('active');
+    }, 600);
+    
+    // Send sound command to launchpad via WebRTC data channel
+    const success = webrtcConnection.sendMessage({
+        type: 'remote-command',
+        command: 'play-sound',
+        soundId: soundId,
+        from: 'remote-control',
+        timestamp: Date.now()
+    });
+    
+    if (success) {
+        console.log(`Sent sound command: ${soundId}`);
+    } else {
+        console.error('Failed to send sound command');
+        alert('Failed to send sound command to launchpad!');
+    }
+}
+
 function testAllRemoteOverlays() {
     const buttons = document.querySelectorAll('.remote-btn');
     let delay = 0;
@@ -337,23 +368,20 @@ function updateGameTimerDisplay() {
 
 function resetGameTimerDisplay() {
     const display = document.getElementById('game-timer-display');
-    const progress = document.getElementById('game-timer-progress');
-    const status = document.getElementById('game-timer-status');
+    const button = document.getElementById('game-timer-btn');
     
-    if (display) display.textContent = '00:00';
-    if (progress) {
-        const circumference = 2 * Math.PI * 50; // radius = 50
-        progress.style.strokeDashoffset = circumference;
+    if (display) display.textContent = 'Timer';
+    if (button) {
+        button.disabled = true;
+        button.classList.remove('active');
     }
-    if (status) status.textContent = 'Aucun timer actif';
 }
 
 function updateGameTimerStatus(timerData) {
     const display = document.getElementById('game-timer-display');
-    const progress = document.getElementById('game-timer-progress');
-    const status = document.getElementById('game-timer-status');
+    const button = document.getElementById('game-timer-btn');
     
-    if (!display || !progress || !status) return;
+    if (!display || !button) return;
     
     if (!timerData.active) {
         resetGameTimerDisplay();
@@ -367,15 +395,9 @@ function updateGameTimerStatus(timerData) {
     const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     display.textContent = formattedTime;
     
-    // Update progress ring
-    const totalTime = timerData.totalTime;
-    const progressPercent = (totalTime - timeLeft) / totalTime;
-    const circumference = 2 * Math.PI * 50; // radius = 50
-    const offset = circumference - (progressPercent * circumference);
-    progress.style.strokeDashoffset = offset;
-    
-    // Update status
-    status.textContent = `Timer actif - ${formattedTime} restant`;
+    // Update button state
+    button.disabled = false;
+    button.classList.add('active');
 }
 
 // Handle game timer messages from launchpad

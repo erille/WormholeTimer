@@ -763,6 +763,9 @@ async function startServer() {
                     timerData: timerStatus,
                     timestamp: Date.now()
                 });
+            } else if (message.type === 'remote-command' && message.command === 'play-sound') {
+                console.log('Received sound command:', message.soundId);
+                playSound(message.soundId);
             }
         };
         
@@ -913,7 +916,7 @@ function startGameTimer(overlayType) {
     // Set start time
     gameTimerStartTime = Date.now();
     
-    // Start 30-minute timer (30 * 60 * 1000 milliseconds)
+    // Start 1-minute timer (1 * 60 * 1000 milliseconds) - for testing
     gameTimer = setTimeout(() => {
         console.log(`Game timer finished for overlay: ${overlayType}`);
         playSound('alarm');
@@ -930,7 +933,7 @@ function startGameTimer(overlayType) {
                 timestamp: Date.now()
             });
         }
-    }, 30 * 60 * 1000); // 30 minutes
+    }, 1 * 60 * 1000); // 1 minute for testing
     
     console.log(`Game timer started for overlay: ${overlayType}`);
     
@@ -940,7 +943,7 @@ function startGameTimer(overlayType) {
             type: 'game-timer-started',
             overlay: overlayType,
             startTime: gameTimerStartTime,
-            duration: 30 * 60 * 1000, // 30 minutes in milliseconds
+            duration: 1 * 60 * 1000, // 1 minute in milliseconds for testing
             timestamp: Date.now()
         });
     }
@@ -956,7 +959,7 @@ function getGameTimerStatus() {
     }
     
     const elapsed = Date.now() - gameTimerStartTime;
-    const totalTime = 30 * 60 * 1000; // 30 minutes
+    const totalTime = 1 * 60 * 1000; // 1 minute for testing
     const timeLeft = Math.max(0, totalTime - elapsed);
     
     return {

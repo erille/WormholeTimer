@@ -119,24 +119,14 @@
                     <div class="btn-icon">➡️</div>
                     <div class="btn-label">Suivant</div>
                 </button>
-            </div>
-
-            <!-- Game Timer Section -->
-            <div class="game-timer-section">
-                <h3>⏰ Timer de Jeu</h3>
-                <div class="game-timer-display">
-                    <div class="timer-circle">
-                        <div class="timer-time" id="game-timer-display">00:00</div>
-                        <div class="timer-label">30 MINUTES</div>
-                    </div>
-                    <div class="timer-progress">
-                        <svg class="progress-ring-svg" width="120" height="120">
-                            <circle class="progress-ring-circle-bg" cx="60" cy="60" r="50"></circle>
-                            <circle class="progress-ring-circle" cx="60" cy="60" r="50" id="game-timer-progress"></circle>
-                        </svg>
-                    </div>
-                </div>
-                <div class="timer-status" id="game-timer-status">Aucun timer actif</div>
+                <button class="remote-btn timer-btn" id="game-timer-btn" disabled>
+                    <div class="btn-icon">⏰</div>
+                    <div class="btn-label" id="game-timer-display">Timer</div>
+                </button>
+                <button class="remote-btn timer-btn" data-sound="alarm">
+                    <div class="btn-icon">🔔</div>
+                    <div class="btn-label">Alarme</div>
+                </button>
             </div>
 
             <div class="remote-controls">
