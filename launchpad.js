@@ -121,9 +121,9 @@ function triggerLaunchpadOverlay(overlayType, buttonElement) {
         buttonElement.classList.remove('active');
     }, 600);
     
-    // Check if it's a video overlay (sojugroup or sojusolo)
-    if (overlayType === 'sojugroup' || overlayType === 'sojusolo') {
-        // Show video overlay directly (no sound)
+    // Check if it's a video overlay (sojugroup, sojusolo, or redlight)
+    if (overlayType === 'sojugroup' || overlayType === 'sojusolo' || overlayType === 'redlight') {
+        // Show video overlay directly (no sound for soju videos, sound for redlight)
         showVideoOverlay(overlayType);
     } else if (overlayType === 'quiz-questions') {
         // Show Quiz Questions overlay directly (no sound)
@@ -163,6 +163,15 @@ function showVideoOverlay(videoType) {
     
     // Reset and play video
     video.currentTime = 0;
+    
+    // Enable sound for redlight video, keep muted for others
+    if (videoType === 'redlight') {
+        video.muted = false;
+        video.volume = 0.7; // Set volume to 70%
+    } else {
+        video.muted = true;
+    }
+    
     video.play().catch(e => {
         console.error(`Error playing ${videoType} video:`, e);
     });

@@ -129,6 +129,12 @@
                     <div class="btn-label">Soju Solo</div>
                 </button>
 
+                <!-- Button for Redlight Video -->
+                <button class="launchpad-btn timer-btn" data-overlay="redlight">
+                    <div class="btn-icon">🔴</div>
+                    <div class="btn-label">Redlight</div>
+                </button>
+
                 <!-- Button for Quiz Questions -->
                 <button class="launchpad-btn timer-btn" data-overlay="quiz-questions">
                     <div class="btn-icon">📊</div>
@@ -299,6 +305,16 @@
         <div class="video-container">
             <video id="sojusolo-video" class="overlay-video" autoplay muted>
                 <source src="video/sojusolo.mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture de vidéos.
+            </video>
+        </div>
+    </div>
+
+    <!-- Redlight Video Overlay -->
+    <div id="overlay-redlight" class="timer-overlay">
+        <div class="video-container">
+            <video id="redlight-video" class="overlay-video" autoplay>
+                <source src="video/redlight.mp4" type="video/mp4">
                 Votre navigateur ne supporte pas la lecture de vidéos.
             </video>
         </div>
