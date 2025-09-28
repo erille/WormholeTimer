@@ -128,18 +128,24 @@ function triggerLaunchpadOverlay(overlayType, buttonElement) {
     if (overlayType === 'sojugroup' || overlayType === 'sojusolo' || overlayType === 'redlight') {
         // Close all overlays for video overlays (no wormhole needed)
         closeAllOverlays();
-        // Show video overlay directly (no sound for soju videos, sound for redlight)
-        showVideoOverlay(overlayType);
+        // Small delay to ensure overlays are closed before showing new one
+        setTimeout(() => {
+            showVideoOverlay(overlayType);
+        }, 100);
     } else if (overlayType === 'quiz-questions') {
         // Close all overlays for quiz
         closeAllOverlays();
-        // Show Quiz Questions overlay directly (no sound)
-        showQuizQuestionsOverlay();
+        // Small delay to ensure overlays are closed before showing new one
+        setTimeout(() => {
+            showQuizQuestionsOverlay();
+        }, 100);
     } else if (overlayType === 'quiz-reponses') {
         // Close all overlays for quiz
         closeAllOverlays();
-        // Show Quiz Réponses overlay directly (no sound)
-        showQuizReponsesOverlay();
+        // Small delay to ensure overlays are closed before showing new one
+        setTimeout(() => {
+            showQuizReponsesOverlay();
+        }, 100);
     } else {
         // Close all overlays except wormhole for game overlays
         closeAllOverlaysExceptWormhole();
