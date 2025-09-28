@@ -116,9 +116,6 @@ function setupLaunchpadEventListeners() {
 }
 
 function triggerLaunchpadOverlay(overlayType, buttonElement) {
-    // Close all active overlays before showing new one
-    closeAllOverlays();
-    
     // Add active class for visual feedback
     buttonElement.classList.add('active');
     
@@ -129,15 +126,24 @@ function triggerLaunchpadOverlay(overlayType, buttonElement) {
     
     // Check if it's a video overlay (sojugroup, sojusolo, or redlight)
     if (overlayType === 'sojugroup' || overlayType === 'sojusolo' || overlayType === 'redlight') {
+        // Close all overlays except wormhole for video overlays
+        closeAllOverlaysExceptWormhole();
         // Show video overlay directly (no sound for soju videos, sound for redlight)
         showVideoOverlay(overlayType);
     } else if (overlayType === 'quiz-questions') {
+        // Close all overlays for quiz
+        closeAllOverlays();
         // Show Quiz Questions overlay directly (no sound)
         showQuizQuestionsOverlay();
     } else if (overlayType === 'quiz-reponses') {
+        // Close all overlays for quiz
+        closeAllOverlays();
         // Show Quiz Réponses overlay directly (no sound)
         showQuizReponsesOverlay();
     } else {
+        // Close all overlays except wormhole for game overlays
+        closeAllOverlaysExceptWormhole();
+        
         // Play Portal sound for regular overlays
         playSound('portal');
         
@@ -946,6 +952,42 @@ function closeAllOverlays() {
     console.log('All overlays closed');
 }
 
+function closeAllOverlaysExceptWormhole() {
+    console.log('Closing all active overlays except wormhole...');
+    
+    // Close all video overlays
+    const videoOverlays = ['sojugroup', 'sojusolo', 'redlight'];
+    videoOverlays.forEach(videoType => {
+        hideVideoOverlay(videoType);
+    });
+    
+    // Close all second overlays (game overlays)
+    const secondOverlays = ['123soleil', 'A', 'slowmotion', 'sport', 'sing', 'equilivre', 'joker', 'kawibawibo', 'miaou', 'mime', 'dance', 'mix'];
+    secondOverlays.forEach(overlayType => {
+        hideSecondOverlay(overlayType);
+    });
+    
+    // Close timer overlays except wormhole
+    const timerOverlays = ['5min', '30s'];
+    timerOverlays.forEach(timerType => {
+        hideTimerOverlay(timerType);
+    });
+    
+    // Close quiz overlays
+    hideQuizQuestionsOverlay();
+    hideQuizReponsesOverlay();
+    
+    // Stop any active timers except game timer
+    Object.keys(activeTimers).forEach(timerType => {
+        if (activeTimers[timerType]) {
+            clearInterval(activeTimers[timerType]);
+            activeTimers[timerType] = null;
+        }
+    });
+    
+    console.log('All overlays closed except wormhole');
+}
+
 // Game Timer Functions (30 minutes)
 function startGameTimer(overlayType) {
     // Clear any existing game timer
@@ -1038,6 +1080,7 @@ window.WormholeLaunchpad = {
     startGameTimer,
     getGameTimerStatus,
     stopGameTimer,
-    closeAllOverlays
+    closeAllOverlays,
+    closeAllOverlaysExceptWormhole
 };
 
