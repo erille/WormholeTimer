@@ -125,9 +125,12 @@ function triggerLaunchpadOverlay(overlayType, buttonElement) {
     if (overlayType === 'sojugroup' || overlayType === 'sojusolo') {
         // Show video overlay directly (no sound)
         showVideoOverlay(overlayType);
-    } else if (overlayType === 'quiz') {
-        // Show Quiz overlay directly (no sound)
-        showQuizOverlay();
+    } else if (overlayType === 'quiz-questions') {
+        // Show Quiz Questions overlay directly (no sound)
+        showQuizQuestionsOverlay();
+    } else if (overlayType === 'quiz-reponses') {
+        // Show Quiz Réponses overlay directly (no sound)
+        showQuizReponsesOverlay();
     } else {
         // Play Portal sound for regular overlays
         playSound('portal');
@@ -193,36 +196,63 @@ function hideVideoOverlay(videoType) {
 }
 
 // Quiz Images Overlay Functions
-let currentQuizPage = 1;
-let totalQuizPages = 13; // We have 13 JPG files
+let currentQuizQuestionsPage = 1;
+let totalQuizQuestionsPages = 27; // We have 27 JPG files for questions
+let currentQuizReponsesPage = 1;
+let totalQuizReponsesPages = 27; // We have 27 JPG files for answers
 
-function showQuizOverlay() {
-    const overlay = document.getElementById('quiz-overlay');
-    const quizImage = document.getElementById('quiz-image');
+function showQuizQuestionsOverlay() {
+    const overlay = document.getElementById('quiz-questions-overlay');
+    const quizImage = document.getElementById('quiz-questions-image');
     
     if (!overlay || !quizImage) {
-        console.error('Quiz overlay elements not found');
+        console.error('Quiz Questions overlay elements not found');
         return;
     }
     
     // Reset to first page
-    currentQuizPage = 1;
+    currentQuizQuestionsPage = 1;
     
     // Show overlay
     overlay.style.display = 'flex';
     overlay.classList.add('show');
     
     // Load first quiz image
-    loadQuizImage(1);
+    loadQuizQuestionsImage(1);
     
     // Set up quiz controls
-    setupQuizControls();
+    setupQuizQuestionsControls();
     
-    console.log('Quiz overlay shown');
+    console.log('Quiz Questions overlay shown');
 }
 
-function hideQuizOverlay() {
-    const overlay = document.getElementById('quiz-overlay');
+function showQuizReponsesOverlay() {
+    const overlay = document.getElementById('quiz-reponses-overlay');
+    const quizImage = document.getElementById('quiz-reponses-image');
+    
+    if (!overlay || !quizImage) {
+        console.error('Quiz Réponses overlay elements not found');
+        return;
+    }
+    
+    // Reset to first page
+    currentQuizReponsesPage = 1;
+    
+    // Show overlay
+    overlay.style.display = 'flex';
+    overlay.classList.add('show');
+    
+    // Load first quiz image
+    loadQuizReponsesImage(1);
+    
+    // Set up quiz controls
+    setupQuizReponsesControls();
+    
+    console.log('Quiz Réponses overlay shown');
+}
+
+function hideQuizQuestionsOverlay() {
+    const overlay = document.getElementById('quiz-questions-overlay');
     
     if (!overlay) return;
     
@@ -234,25 +264,50 @@ function hideQuizOverlay() {
         overlay.style.display = 'none';
     }, 300);
     
-    console.log('Quiz overlay hidden');
+    console.log('Quiz Questions overlay hidden');
 }
 
-function setupQuizControls() {
-    const pageInfo = document.getElementById('quiz-page-info');
+function hideQuizReponsesOverlay() {
+    const overlay = document.getElementById('quiz-reponses-overlay');
+    
+    if (!overlay) return;
+    
+    // Remove show class for opacity transition
+    overlay.classList.remove('show');
+    
+    // Hide overlay after transition
+    setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 300);
+    
+    console.log('Quiz Réponses overlay hidden');
+}
+
+function setupQuizQuestionsControls() {
+    const pageInfo = document.getElementById('quiz-questions-page-info');
     
     if (!pageInfo) return;
     
     // Update page info
-    updateQuizPageInfo();
+    updateQuizQuestionsPageInfo();
 }
 
-function loadQuizImage(pageNumber) {
-    const quizImage = document.getElementById('quiz-image');
+function setupQuizReponsesControls() {
+    const pageInfo = document.getElementById('quiz-reponses-page-info');
+    
+    if (!pageInfo) return;
+    
+    // Update page info
+    updateQuizReponsesPageInfo();
+}
+
+function loadQuizQuestionsImage(pageNumber) {
+    const quizImage = document.getElementById('quiz-questions-image');
     if (!quizImage) return;
     
     // Format page number with leading zeros (e.g., 0001, 0002, etc.)
     const formattedPageNumber = pageNumber.toString().padStart(4, '0');
-    const imageUrl = `files/quizz_page-${formattedPageNumber}.jpg`;
+    const imageUrl = `files/quizz_questions/Superquizz_questions_pdf_page-${formattedPageNumber}.jpg`;
     
     // Add loading effect
     quizImage.style.opacity = '0.5';
@@ -263,67 +318,157 @@ function loadQuizImage(pageNumber) {
     // Restore opacity when image loads
     quizImage.onload = () => {
         quizImage.style.opacity = '1';
-        console.log(`Loaded quiz image: ${imageUrl}`);
+        console.log(`Loaded quiz questions image: ${imageUrl}`);
     };
     
     // Handle image load errors
     quizImage.onerror = () => {
-        console.error(`Failed to load quiz image: ${imageUrl}`);
+        console.error(`Failed to load quiz questions image: ${imageUrl}`);
         quizImage.style.opacity = '1';
     };
 }
 
-function updateQuizPageInfo() {
-    const pageInfo = document.getElementById('quiz-page-info');
+function loadQuizReponsesImage(pageNumber) {
+    const quizImage = document.getElementById('quiz-reponses-image');
+    if (!quizImage) return;
+    
+    // Format page number with leading zeros (e.g., 0001, 0002, etc.)
+    const formattedPageNumber = pageNumber.toString().padStart(4, '0');
+    const imageUrl = `files/quizz_reponses/Superquizz_reponses_pdf_2_pages-to-jpg-${formattedPageNumber}.jpg`;
+    
+    // Add loading effect
+    quizImage.style.opacity = '0.5';
+    
+    // Load the image
+    quizImage.src = imageUrl;
+    
+    // Restore opacity when image loads
+    quizImage.onload = () => {
+        quizImage.style.opacity = '1';
+        console.log(`Loaded quiz réponses image: ${imageUrl}`);
+    };
+    
+    // Handle image load errors
+    quizImage.onerror = () => {
+        console.error(`Failed to load quiz réponses image: ${imageUrl}`);
+        quizImage.style.opacity = '1';
+    };
+}
+
+function updateQuizQuestionsPageInfo() {
+    const pageInfo = document.getElementById('quiz-questions-page-info');
     if (pageInfo) {
-        pageInfo.textContent = `Page ${currentQuizPage} / ${totalQuizPages}`;
+        pageInfo.textContent = `Page ${currentQuizQuestionsPage} / ${totalQuizQuestionsPages}`;
     }
 }
 
-// Handle Quiz actions from remote control
-function handleQuizAction(action) {
-    console.log(`handleQuizAction called with action: ${action}`);
+function updateQuizReponsesPageInfo() {
+    const pageInfo = document.getElementById('quiz-reponses-page-info');
+    if (pageInfo) {
+        pageInfo.textContent = `Page ${currentQuizReponsesPage} / ${totalQuizReponsesPages}`;
+    }
+}
+
+// Handle Quiz Questions actions from remote control
+function handleQuizQuestionsAction(action) {
+    console.log(`handleQuizQuestionsAction called with action: ${action}`);
     
-    const overlay = document.getElementById('quiz-overlay');
+    const overlay = document.getElementById('quiz-questions-overlay');
     if (!overlay || overlay.style.display === 'none' || !overlay.classList.contains('show')) {
-        console.log('Quiz overlay not visible, ignoring action');
+        console.log('Quiz Questions overlay not visible, ignoring action');
         return;
     }
     
-    console.log(`Quiz overlay is visible, processing action: ${action}`);
-    console.log(`Current page: ${currentQuizPage}, Total pages: ${totalQuizPages}`);
+    console.log(`Quiz Questions overlay is visible, processing action: ${action}`);
+    console.log(`Current page: ${currentQuizQuestionsPage}, Total pages: ${totalQuizQuestionsPages}`);
     
     if (action === 'prev') {
-        if (currentQuizPage > 1) {
-            currentQuizPage--;
-            loadQuizImage(currentQuizPage);
-            updateQuizPageInfo();
-            console.log(`Moved to previous page: ${currentQuizPage}`);
+        if (currentQuizQuestionsPage > 1) {
+            currentQuizQuestionsPage--;
+            loadQuizQuestionsImage(currentQuizQuestionsPage);
+            updateQuizQuestionsPageInfo();
+            console.log(`Moved to previous page: ${currentQuizQuestionsPage}`);
         } else {
             console.log('Already on first page, cannot go previous');
         }
     } else if (action === 'next') {
-        if (currentQuizPage < totalQuizPages) {
-            currentQuizPage++;
-            loadQuizImage(currentQuizPage);
-            updateQuizPageInfo();
-            console.log(`Moved to next page: ${currentQuizPage}`);
+        if (currentQuizQuestionsPage < totalQuizQuestionsPages) {
+            currentQuizQuestionsPage++;
+            loadQuizQuestionsImage(currentQuizQuestionsPage);
+            updateQuizQuestionsPageInfo();
+            console.log(`Moved to next page: ${currentQuizQuestionsPage}`);
         } else {
             // Close overlay after last page
             console.log('On last page, closing overlay');
-            hideQuizOverlay();
+            hideQuizQuestionsOverlay();
         }
     } else {
-        console.log(`Unknown quiz action: ${action}`);
+        console.log(`Unknown quiz questions action: ${action}`);
     }
     
-    console.log(`Quiz action completed: ${action}, current page: ${currentQuizPage}`);
+    console.log(`Quiz Questions action completed: ${action}, current page: ${currentQuizQuestionsPage}`);
 }
 
-// Keep handlePDFAction for backward compatibility, but redirect to handleQuizAction
+// Handle Quiz Réponses actions from remote control
+function handleQuizReponsesAction(action) {
+    console.log(`handleQuizReponsesAction called with action: ${action}`);
+    
+    const overlay = document.getElementById('quiz-reponses-overlay');
+    if (!overlay || overlay.style.display === 'none' || !overlay.classList.contains('show')) {
+        console.log('Quiz Réponses overlay not visible, ignoring action');
+        return;
+    }
+    
+    console.log(`Quiz Réponses overlay is visible, processing action: ${action}`);
+    console.log(`Current page: ${currentQuizReponsesPage}, Total pages: ${totalQuizReponsesPages}`);
+    
+    if (action === 'prev') {
+        if (currentQuizReponsesPage > 1) {
+            currentQuizReponsesPage--;
+            loadQuizReponsesImage(currentQuizReponsesPage);
+            updateQuizReponsesPageInfo();
+            console.log(`Moved to previous page: ${currentQuizReponsesPage}`);
+        } else {
+            console.log('Already on first page, cannot go previous');
+        }
+    } else if (action === 'next') {
+        if (currentQuizReponsesPage < totalQuizReponsesPages) {
+            currentQuizReponsesPage++;
+            loadQuizReponsesImage(currentQuizReponsesPage);
+            updateQuizReponsesPageInfo();
+            console.log(`Moved to next page: ${currentQuizReponsesPage}`);
+        } else {
+            // Close overlay after last page
+            console.log('On last page, closing overlay');
+            hideQuizReponsesOverlay();
+        }
+    } else {
+        console.log(`Unknown quiz réponses action: ${action}`);
+    }
+    
+    console.log(`Quiz Réponses action completed: ${action}, current page: ${currentQuizReponsesPage}`);
+}
+
+// Handle PDF actions from remote control - determine which quiz to control
 function handlePDFAction(action) {
-    console.log(`handlePDFAction called, redirecting to handleQuizAction`);
-    handleQuizAction(action);
+    console.log(`handlePDFAction called with action: ${action}`);
+    
+    // Check which quiz overlay is currently visible
+    const questionsOverlay = document.getElementById('quiz-questions-overlay');
+    const reponsesOverlay = document.getElementById('quiz-reponses-overlay');
+    
+    const questionsVisible = questionsOverlay && questionsOverlay.style.display !== 'none' && questionsOverlay.classList.contains('show');
+    const reponsesVisible = reponsesOverlay && reponsesOverlay.style.display !== 'none' && reponsesOverlay.classList.contains('show');
+    
+    if (questionsVisible) {
+        console.log('Quiz Questions overlay is visible, routing to handleQuizQuestionsAction');
+        handleQuizQuestionsAction(action);
+    } else if (reponsesVisible) {
+        console.log('Quiz Réponses overlay is visible, routing to handleQuizReponsesAction');
+        handleQuizReponsesAction(action);
+    } else {
+        console.log('No quiz overlay is visible, ignoring action');
+    }
 }
 
 function triggerTimerOverlay(timerType, buttonElement) {

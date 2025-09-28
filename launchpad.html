@@ -129,10 +129,16 @@
                     <div class="btn-label">Soju Solo</div>
                 </button>
 
-                <!-- Button for PDF Quiz -->
-                <button class="launchpad-btn timer-btn" data-overlay="quiz">
+                <!-- Button for Quiz Questions -->
+                <button class="launchpad-btn timer-btn" data-overlay="quiz-questions">
                     <div class="btn-icon">📊</div>
-                    <div class="btn-label">Quiz PDF</div>
+                    <div class="btn-label">Quiz Questions</div>
+                </button>
+
+                <!-- Button for Quiz Answers -->
+                <button class="launchpad-btn timer-btn" data-overlay="quiz-reponses">
+                    <div class="btn-icon">📋</div>
+                    <div class="btn-label">Quiz Réponses</div>
                 </button>
                 </div>
             </div>
@@ -305,14 +311,26 @@
         </div>
     </div>
 
-    <!-- Quiz Images Overlay -->
-    <div id="quiz-overlay" class="quiz-overlay">
+    <!-- Quiz Questions Overlay -->
+    <div id="quiz-questions-overlay" class="quiz-overlay">
         <div class="quiz-container">
             <div class="quiz-controls">
-                <span id="quiz-page-info" class="quiz-page-info">Page 1 / 13</span>
+                <span id="quiz-questions-page-info" class="quiz-page-info">Page 1 / 27</span>
             </div>
             <div class="quiz-viewer">
-                <img id="quiz-image" src="" alt="Quiz Page" class="quiz-image">
+                <img id="quiz-questions-image" src="" alt="Quiz Questions Page" class="quiz-image">
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Réponses Overlay -->
+    <div id="quiz-reponses-overlay" class="quiz-overlay">
+        <div class="quiz-container">
+            <div class="quiz-controls">
+                <span id="quiz-reponses-page-info" class="quiz-page-info">Page 1 / 27</span>
+            </div>
+            <div class="quiz-viewer">
+                <img id="quiz-reponses-image" src="" alt="Quiz Réponses Page" class="quiz-image">
             </div>
         </div>
     </div>
